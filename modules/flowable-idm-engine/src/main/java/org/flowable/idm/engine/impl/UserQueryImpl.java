@@ -30,12 +30,10 @@ import org.flowable.idm.api.UserQueryProperty;
 import org.flowable.idm.engine.impl.persistence.entity.UserEntityImpl;
 import org.flowable.idm.engine.impl.util.CommandContextUtil;
 import org.flowable.idm.engine.impl.ws.UserWrapper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.reactive.ClientHttpConnector;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
-import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.netty.http.client.HttpClient;
 
@@ -47,7 +45,6 @@ import java.util.stream.Collectors;
 /**
  * @author Joram Barrez
  */
-@Component
 public class UserQueryImpl extends AbstractQuery<UserQuery, User> implements UserQuery, QueryCacheValues {
 
     private static final long serialVersionUID = 1L;
@@ -71,7 +68,6 @@ public class UserQueryImpl extends AbstractQuery<UserQuery, User> implements Use
     protected List<String> groupIds;
     protected String tenantId;
 
-    @Value("${aditoUrl}")
     private String aditoUrl;
 
     public UserQueryImpl() {
@@ -81,8 +77,9 @@ public class UserQueryImpl extends AbstractQuery<UserQuery, User> implements Use
         super(commandContext);
     }
 
-    public UserQueryImpl(CommandExecutor commandExecutor) {
+    public UserQueryImpl(CommandExecutor commandExecutor, String aditoUrl) {
         super(commandExecutor);
+        this.aditoUrl = aditoUrl;
     }
 
     @Override
@@ -290,7 +287,6 @@ public class UserQueryImpl extends AbstractQuery<UserQuery, User> implements Use
     public List<User> executeList(CommandContext commandContext)
     {
         List<User> users = new ArrayList<>();
-        System.out.println("aditoUrl is " + aditoUrl);
         if (aditoUrl != null && !aditoUrl.isEmpty()) {
             try {
                 SslContext sslContext = SslContextBuilder

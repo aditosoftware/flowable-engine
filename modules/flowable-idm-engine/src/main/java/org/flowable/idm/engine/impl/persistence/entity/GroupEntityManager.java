@@ -30,6 +30,8 @@ public interface GroupEntityManager extends EntityManager<GroupEntity> {
 
     GroupQuery createNewGroupQuery();
 
+    GroupQuery createNewGroupQuery(String aditoUrl);
+
     List<Group> findGroupByQueryCriteria(GroupQueryImpl query);
 
     long findGroupCountByQueryCriteria(GroupQueryImpl query);

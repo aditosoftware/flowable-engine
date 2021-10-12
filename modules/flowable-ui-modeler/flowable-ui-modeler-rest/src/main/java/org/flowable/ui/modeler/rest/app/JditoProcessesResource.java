@@ -24,7 +24,7 @@ import java.util.Map;
 @RequestMapping("/app")
 public class JditoProcessesResource {
 
-    @Value("${aditoUrl}")
+    @Value("${aditoUrl:https://host.docker.internal:8443}")
     private String aditoUrl;
 
     @GetMapping(value = "/rest/jditoprocesses")

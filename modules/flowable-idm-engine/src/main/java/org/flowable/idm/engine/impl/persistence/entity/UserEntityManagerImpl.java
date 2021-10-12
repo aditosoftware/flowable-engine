@@ -94,7 +94,12 @@ public class UserEntityManagerImpl
 
     @Override
     public UserQuery createNewUserQuery() {
-        return new UserQueryImpl(getCommandExecutor());
+        return new UserQueryImpl(getCommandExecutor(), null);
+    }
+
+    @Override
+    public UserQuery createNewUserQuery(String aditoUrl) {
+        return new UserQueryImpl(getCommandExecutor(), aditoUrl);
     }
 
     @Override

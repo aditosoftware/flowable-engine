@@ -108,6 +108,11 @@ public class IdmIdentityServiceImpl extends CommonEngineServiceImpl<IdmEngineCon
     }
 
     @Override
+    public UserQuery createUserQuery(String aditoUrl) {
+        return commandExecutor.execute(new CreateUserQueryCmd(aditoUrl));
+    }
+
+    @Override
     public NativeUserQuery createNativeUserQuery() {
         return new NativeUserQueryImpl(commandExecutor);
     }
@@ -115,6 +120,11 @@ public class IdmIdentityServiceImpl extends CommonEngineServiceImpl<IdmEngineCon
     @Override
     public GroupQuery createGroupQuery() {
         return commandExecutor.execute(new CreateGroupQueryCmd());
+    }
+
+    @Override
+    public GroupQuery createGroupQuery(String aditoUrl) {
+        return commandExecutor.execute(new CreateGroupQueryCmd(aditoUrl));
     }
 
     @Override

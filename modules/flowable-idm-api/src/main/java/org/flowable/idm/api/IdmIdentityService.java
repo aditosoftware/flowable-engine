@@ -58,6 +58,8 @@ public interface IdmIdentityService {
      */
     UserQuery createUserQuery();
 
+    UserQuery createUserQuery(String aditoUrl);
+
     /**
      * Returns a new {@link org.flowable.common.engine.api.query.NativeQuery} for tasks.
      */
@@ -81,6 +83,8 @@ public interface IdmIdentityService {
      * Creates a {@link GroupQuery} that allows to programmatically query the groups.
      */
     GroupQuery createGroupQuery();
+
+    GroupQuery createGroupQuery(String aditoUrl);
 
     /**
      * Returns a new {@link org.flowable.common.engine.api.query.NativeQuery} for tasks.

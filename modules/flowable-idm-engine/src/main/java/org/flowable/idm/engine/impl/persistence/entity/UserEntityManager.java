@@ -39,6 +39,8 @@ public interface UserEntityManager extends EntityManager<UserEntity> {
 
     UserQuery createNewUserQuery();
 
+    UserQuery createNewUserQuery(String aditoUrl);
+
     Boolean checkPassword(String userId, String password, PasswordEncoder passwordEncoder, PasswordSalt passwordSalt);
 
     List<User> findUsersByNativeQuery(Map<String, Object> parameterMap);

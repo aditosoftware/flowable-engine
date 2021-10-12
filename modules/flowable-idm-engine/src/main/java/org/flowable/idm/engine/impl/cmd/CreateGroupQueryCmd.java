@@ -26,10 +26,17 @@ import org.flowable.idm.engine.impl.util.CommandContextUtil;
 public class CreateGroupQueryCmd implements Command<GroupQuery>, Serializable {
 
     private static final long serialVersionUID = 1L;
+    private String aditoUrl;
+
+    public CreateGroupQueryCmd () {}
+
+    public CreateGroupQueryCmd (String aditoUrl) {
+        this.aditoUrl = aditoUrl;
+    }
 
     @Override
     public GroupQuery execute(CommandContext commandContext) {
-        return CommandContextUtil.getGroupEntityManager(commandContext).createNewGroupQuery();
+        return CommandContextUtil.getGroupEntityManager(commandContext).createNewGroupQuery(aditoUrl);
     }
 
 }

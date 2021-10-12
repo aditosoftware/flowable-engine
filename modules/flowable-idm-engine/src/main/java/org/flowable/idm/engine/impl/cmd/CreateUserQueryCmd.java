@@ -26,10 +26,17 @@ import org.flowable.idm.engine.impl.util.CommandContextUtil;
 public class CreateUserQueryCmd implements Command<UserQuery>, Serializable {
 
     private static final long serialVersionUID = 1L;
+    private String aditoUrl;
+
+    public CreateUserQueryCmd () {}
+
+    public CreateUserQueryCmd (String aditoUrl) {
+        this.aditoUrl = aditoUrl;
+    }
 
     @Override
     public UserQuery execute(CommandContext commandContext) {
-        return CommandContextUtil.getUserEntityManager(commandContext).createNewUserQuery();
+        return CommandContextUtil.getUserEntityManager(commandContext).createNewUserQuery(aditoUrl);
     }
 
 }

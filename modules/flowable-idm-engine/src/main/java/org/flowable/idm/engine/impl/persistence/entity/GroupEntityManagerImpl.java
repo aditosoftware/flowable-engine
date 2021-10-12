@@ -62,7 +62,12 @@ public class GroupEntityManagerImpl
 
     @Override
     public GroupQuery createNewGroupQuery() {
-        return new GroupQueryImpl(getCommandExecutor());
+        return new GroupQueryImpl(getCommandExecutor(), null);
+    }
+
+    @Override
+    public GroupQuery createNewGroupQuery(String aditoUrl) {
+        return new GroupQueryImpl(getCommandExecutor(), aditoUrl);
     }
 
     @Override

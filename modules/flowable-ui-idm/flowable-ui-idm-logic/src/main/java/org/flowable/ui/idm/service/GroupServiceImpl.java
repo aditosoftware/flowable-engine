@@ -24,6 +24,7 @@ import org.flowable.ui.common.service.exception.NotFoundException;
 import org.flowable.ui.idm.constant.GroupTypes;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * @author Joram Barrez
@@ -32,14 +33,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class GroupServiceImpl extends AbstractIdmService implements GroupService {
 
+    @Value("${aditoUrl:https://host.docker.internal:8443}")
+    private String aditoUrl;
+
     @Override
     public List<Group> getGroupsForUser(String userId) {
-        return identityService.createGroupQuery().groupMember(userId).list();
+        return identityService.createGroupQuery(aditoUrl).groupMember(userId).list();
     }
 
     @Override
     public List<Group> getGroups(String filter) {
-        GroupQuery groupQuery = identityService.createGroupQuery();
+        GroupQuery groupQuery = identityService.createGroupQuery(aditoUrl);
         if (StringUtils.isNotEmpty(filter)) {
             groupQuery.groupNameLikeIgnoreCase("%" + (filter != null ? filter : "") + "%");
         }
@@ -47,7 +51,7 @@ public class GroupServiceImpl extends AbstractIdmService implements GroupService
     }
 
     public Group getGroup(String groupId) {
-        return identityService.createGroupQuery().groupId(groupId).singleResult();
+        return identityService.createGroupQuery(aditoUrl).groupId(groupId).singleResult();
     }
 
     public List<User> getGroupUsers(String groupId, String filter, Integer page, Integer pageSize) {
@@ -63,7 +67,7 @@ public class GroupServiceImpl extends AbstractIdmService implements GroupService
     }
 
     protected UserQuery createUsersForGroupQuery(String groupId, String filter) {
-        UserQuery userQuery = identityService.createUserQuery().memberOfGroup(groupId);
+        UserQuery userQuery = identityService.createUserQuery(aditoUrl).memberOfGroup(groupId);
         if (StringUtils.isNotEmpty(filter)) {
             userQuery.userFullNameLikeIgnoreCase("%" + filter + "%");
         }
@@ -93,7 +97,7 @@ public class GroupServiceImpl extends AbstractIdmService implements GroupService
             throw new BadRequestException("Group name required");
         }
 
-        Group group = identityService.createGroupQuery().groupId(groupId).singleResult();
+        Group group = identityService.createGroupQuery(aditoUrl).groupId(groupId).singleResult();
         if (group == null) {
             throw new NotFoundException();
         }
@@ -105,7 +109,7 @@ public class GroupServiceImpl extends AbstractIdmService implements GroupService
     }
 
     public void deleteGroup(String groupId) {
-        Group group = identityService.createGroupQuery().groupId(groupId).singleResult();
+        Group group = identityService.createGroupQuery(aditoUrl).groupId(groupId).singleResult();
         if (group == null) {
             throw new NotFoundException();
         }
@@ -115,12 +119,12 @@ public class GroupServiceImpl extends AbstractIdmService implements GroupService
 
     public void addGroupMember(String groupId, String userId) {
         verifyGroupMemberExists(groupId, userId);
-        Group group = identityService.createGroupQuery().groupId(groupId).singleResult();
+        Group group = identityService.createGroupQuery(aditoUrl).groupId(groupId).singleResult();
         if (group == null) {
             throw new NotFoundException();
         }
 
-        User user = identityService.createUserQuery().userId(userId).singleResult();
+        User user = identityService.createUserQuery(aditoUrl).userId(userId).singleResult();
         if (user == null) {
             throw new NotFoundException();
         }
@@ -130,12 +134,12 @@ public class GroupServiceImpl extends AbstractIdmService implements GroupService
 
     public void deleteGroupMember(String groupId, String userId) {
         verifyGroupMemberExists(groupId, userId);
-        Group group = identityService.createGroupQuery().groupId(groupId).singleResult();
+        Group group = identityService.createGroupQuery(aditoUrl).groupId(groupId).singleResult();
         if (group == null) {
             throw new NotFoundException();
         }
 
-        User user = identityService.createUserQuery().userId(userId).singleResult();
+        User user = identityService.createUserQuery(aditoUrl).userId(userId).singleResult();
         if (user == null) {
             throw new NotFoundException();
         }
@@ -145,9 +149,9 @@ public class GroupServiceImpl extends AbstractIdmService implements GroupService
 
     protected void verifyGroupMemberExists(String groupId, String userId) {
         // Check existence
-        Group group = identityService.createGroupQuery().groupId(groupId).singleResult();
-        User user = identityService.createUserQuery().userId(userId).singleResult();
-        for (User groupMember : identityService.createUserQuery().memberOfGroup(groupId).list()) {
+        Group group = identityService.createGroupQuery(aditoUrl).groupId(groupId).singleResult();
+        User user = identityService.createUserQuery(aditoUrl).userId(userId).singleResult();
+        for (User groupMember : identityService.createUserQuery(aditoUrl).memberOfGroup(groupId).list()) {
             if (groupMember.getId().equals(userId)) {
                 user = groupMember;
             }

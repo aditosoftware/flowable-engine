@@ -36,18 +36,15 @@ import org.flowable.idm.engine.impl.persistence.entity.UserEntityImpl;
 import org.flowable.idm.engine.impl.util.CommandContextUtil;
 import org.flowable.idm.engine.impl.ws.GroupWrapper;
 import org.flowable.idm.engine.impl.ws.UserWrapper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
-import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.netty.http.client.HttpClient;
 
 /**
  * @author Joram Barrez
  */
-@Component
 public class GroupQueryImpl extends AbstractQuery<GroupQuery, Group> implements GroupQuery, QueryCacheValues {
 
     private static final long serialVersionUID = 1L;
@@ -60,7 +57,6 @@ public class GroupQueryImpl extends AbstractQuery<GroupQuery, Group> implements 
     protected String userId;
     protected List<String> userIds;
 
-    @Value("${aditoUrl}")
     private String aditoUrl;
 
     public GroupQueryImpl() {
@@ -70,8 +66,9 @@ public class GroupQueryImpl extends AbstractQuery<GroupQuery, Group> implements 
         super(commandContext);
     }
 
-    public GroupQueryImpl(CommandExecutor commandExecutor) {
+    public GroupQueryImpl(CommandExecutor commandExecutor, String aditoUrl) {
         super(commandExecutor);
+        this.aditoUrl = aditoUrl;
     }
 
     @Override

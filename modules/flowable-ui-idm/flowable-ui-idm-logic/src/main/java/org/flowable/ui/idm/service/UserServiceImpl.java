@@ -28,6 +28,7 @@ import org.flowable.ui.common.service.exception.NotFoundException;
 import org.flowable.ui.idm.model.UserInformation;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * @author Joram Barrez
@@ -36,6 +37,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class UserServiceImpl extends AbstractIdmService implements UserService {
 
+    @Value("${aditoUrl:https://host.docker.internal:8443}")
+    private String aditoUrl;
     private static final int MAX_USER_SIZE = 100;
 
     public List<User> getUsers(String filter, String sort, Integer start) {
@@ -49,7 +52,7 @@ public class UserServiceImpl extends AbstractIdmService implements UserService {
     }
 
     protected UserQuery createUserQuery(String filter, String sort) {
-        UserQuery userQuery = identityService.createUserQuery();
+        UserQuery userQuery = identityService.createUserQuery(aditoUrl);
         if (StringUtils.isNotEmpty(filter)) {
             userQuery.userFullNameLikeIgnoreCase("%" + filter + "%");
         }
@@ -74,7 +77,7 @@ public class UserServiceImpl extends AbstractIdmService implements UserService {
     }
 
     public void updateUserDetails(String userId, String firstName, String lastName, String email, String tenantId) {
-        User user = identityService.createUserQuery().userId(userId).singleResult();
+        User user = identityService.createUserQuery(aditoUrl).userId(userId).singleResult();
         if (user != null) {
             user.setFirstName(firstName);
             user.setLastName(lastName);
@@ -86,7 +89,7 @@ public class UserServiceImpl extends AbstractIdmService implements UserService {
 
     public void bulkUpdatePassword(List<String> userIds, String newPassword) {
         for (String userId : userIds) {
-            User user = identityService.createUserQuery().userId(userId).singleResult();
+            User user = identityService.createUserQuery(aditoUrl).userId(userId).singleResult();
             if (user != null) {
                 user.setPassword(newPassword);
                 identityService.updateUserPassword(user);
@@ -136,7 +139,7 @@ public class UserServiceImpl extends AbstractIdmService implements UserService {
         user.setTenantId(tenantId);
         identityService.saveUser(user);
 
-        User savedUser = identityService.createUserQuery().userId(id).singleResult();
+        User savedUser = identityService.createUserQuery(aditoUrl).userId(id).singleResult();
         savedUser.setPassword(password);
         identityService.updateUserPassword(savedUser);
 
@@ -145,7 +148,7 @@ public class UserServiceImpl extends AbstractIdmService implements UserService {
 
     @Override
     public UserInformation getUserInformation(String userId) {
-        User user = identityService.createUserQuery().userId(userId).singleResult();
+        User user = identityService.createUserQuery(aditoUrl).userId(userId).singleResult();
         if (user == null) {
             throw new NotFoundException();
         }
