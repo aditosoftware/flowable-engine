@@ -308,6 +308,8 @@ button.btn.btn-danger {
     -moz-border-radius: 0px;
     border-radius: 0px;
     box-shadow: none;
+    max-height: 300px;
+    overflow-y: auto;
 }
 
 .dropdown-menu:focus {
@@ -3280,3 +3282,8 @@ ul#strength > li:last-child {
   height:auto;
 }
 
+.scrollable-menu {
+    height: auto;
+    max-height: 200px;
+    overflow-y: scroll;
+}

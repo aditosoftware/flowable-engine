@@ -246,6 +246,10 @@ FLOWABLE.APP_URL = {
 
     getJditoProcessesUrl: function () {
         return FLOWABLE.CONFIG.contextRoot + '/app/rest/jditoprocesses';
-    }
+    },
+
+     getTaskVariablesUrl: function () {
+         return FLOWABLE.CONFIG.contextRoot + '/app/rest/taskvariables';
+     }
 
 };

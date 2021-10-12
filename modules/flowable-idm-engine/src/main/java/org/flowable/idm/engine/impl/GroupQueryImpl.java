@@ -36,15 +36,18 @@ import org.flowable.idm.engine.impl.persistence.entity.UserEntityImpl;
 import org.flowable.idm.engine.impl.util.CommandContextUtil;
 import org.flowable.idm.engine.impl.ws.GroupWrapper;
 import org.flowable.idm.engine.impl.ws.UserWrapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.netty.http.client.HttpClient;
 
 /**
  * @author Joram Barrez
  */
+@Component
 public class GroupQueryImpl extends AbstractQuery<GroupQuery, Group> implements GroupQuery, QueryCacheValues {
 
     private static final long serialVersionUID = 1L;
@@ -56,6 +59,9 @@ public class GroupQueryImpl extends AbstractQuery<GroupQuery, Group> implements 
     protected String type;
     protected String userId;
     protected List<String> userIds;
+
+    //@Value("#{environment['aditoUrl']}")
+    private String aditoUrl = "https://localhost:8443";
 
     public GroupQueryImpl() {
     }
@@ -167,47 +173,50 @@ public class GroupQueryImpl extends AbstractQuery<GroupQuery, Group> implements 
     @Override
     public List<Group> executeList(CommandContext commandContext) {
         List<Group> groups = new ArrayList<>();
-        try {
-            SslContext sslContext = SslContextBuilder
-                    .forClient()
-                    .trustManager(InsecureTrustManagerFactory.INSTANCE)
-                    .build();
-            HttpClient httpClient = HttpClient.create().secure(t -> t.sslContext(sslContext));
+
+        if (aditoUrl != null && !aditoUrl.isEmpty()) {
+            try {
+                SslContext sslContext = SslContextBuilder
+                        .forClient()
+                        .trustManager(InsecureTrustManagerFactory.INSTANCE)
+                        .build();
+                HttpClient httpClient = HttpClient.create().secure(t -> t.sslContext(sslContext));
 
 
-            WebClient.Builder clientBuilder = WebClient.builder()
-                    .baseUrl("https://localhost:8443")
-                    .clientConnector(new ReactorClientHttpConnector(httpClient))
-                    .defaultHeaders(headers -> headers.setBasicAuth("flowableIdmService", "HczABCxBEUKSmwQEnT8vbmkE8Bj1hcXOKSbsLWBg"))
-                    .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+                WebClient.Builder clientBuilder = WebClient.builder()
+                        .baseUrl(aditoUrl)
+                        .clientConnector(new ReactorClientHttpConnector(httpClient))
+                        .defaultHeaders(headers -> headers.setBasicAuth("flowableIdmService", "HczABCxBEUKSmwQEnT8vbmkE8Bj1hcXOKSbsLWBg"))
+                        .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
 
-            Gson gson = new Gson();
+                Gson gson = new Gson();
 
-            clientBuilder.defaultHeader("Id", id);
-            clientBuilder.defaultHeader("Ids", gson.toJson(ids));
-            clientBuilder.defaultHeader("Name", name);
-            clientBuilder.defaultHeader("Namelike", nameLike);
-            clientBuilder.defaultHeader("Namelikeignorecase", nameLikeIgnoreCase);
-            clientBuilder.defaultHeader("Userid", userId);
-            clientBuilder.defaultHeader("Userids", gson.toJson(userIds));
-            clientBuilder.defaultHeader("Type", type);
+                clientBuilder.defaultHeader("Id", id);
+                clientBuilder.defaultHeader("Ids", gson.toJson(ids));
+                clientBuilder.defaultHeader("Name", name);
+                clientBuilder.defaultHeader("Namelike", nameLike);
+                clientBuilder.defaultHeader("Namelikeignorecase", nameLikeIgnoreCase);
+                clientBuilder.defaultHeader("Userid", userId);
+                clientBuilder.defaultHeader("Userids", gson.toJson(userIds));
+                clientBuilder.defaultHeader("Type", type);
 
-            WebClient.RequestHeadersSpec<?> spec = clientBuilder.build().get()
-                    .uri("/services/rest/workflowRoles_rest");
-            String wsResult = spec.retrieve().bodyToMono(String.class).block();
+                WebClient.RequestHeadersSpec<?> spec = clientBuilder.build().get()
+                        .uri("/services/rest/workflowRoles_rest");
+                String wsResult = spec.retrieve().bodyToMono(String.class).block();
 
-            GroupWrapper[] wsGroups = gson.fromJson(wsResult, GroupWrapper[].class);
-            groups = Arrays.stream(wsGroups).map(wsGroup -> {
-                Group group = new GroupEntityImpl();
-                group.setId(wsGroup.getId());
-                group.setName(wsGroup.getName());
-                group.setType(wsGroup.getType());
-                return group;
-            }).collect(Collectors.toList());
+                GroupWrapper[] wsGroups = gson.fromJson(wsResult, GroupWrapper[].class);
+                groups = Arrays.stream(wsGroups).map(wsGroup -> {
+                    Group group = new GroupEntityImpl();
+                    group.setId(wsGroup.getId());
+                    group.setName(wsGroup.getName());
+                    group.setType(wsGroup.getType());
+                    return group;
+                }).collect(Collectors.toList());
 
 
-        } catch (Exception e) {
-            e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         return groups;

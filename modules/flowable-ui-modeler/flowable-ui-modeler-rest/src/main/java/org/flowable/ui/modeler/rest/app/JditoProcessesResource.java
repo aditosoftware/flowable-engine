@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
@@ -21,51 +22,49 @@ import java.util.Map;
 @RequestMapping("/app")
 public class JditoProcessesResource {
 
+    //@Value("#{environment['aditoUrl']}")
+    private String aditoUrl = "https://localhost:8443";
+
     @GetMapping(value = "/rest/jditoprocesses")
     public Map<String, String> getProcesses() {
 
         Map<String, String> processes = new HashMap<>();
 
-        try {
-            SslContext sslContext = SslContextBuilder
-                    .forClient()
-                    .trustManager(InsecureTrustManagerFactory.INSTANCE)
-                    .build();
-            HttpClient httpClient = HttpClient.create().secure(t -> t.sslContext(sslContext));
+        if (aditoUrl != null && !aditoUrl.isEmpty()) {
 
-            WebClient.Builder clientBuilder = WebClient.builder()
-                    .baseUrl("https://localhost:8443")
-                    .clientConnector(new ReactorClientHttpConnector(httpClient))
-                    .defaultHeaders(headers -> headers.setBasicAuth("flowableIdmService", "HczABCxBEUKSmwQEnT8vbmkE8Bj1hcXOKSbsLWBg"))
-                    .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+            try {
+                SslContext sslContext = SslContextBuilder
+                        .forClient()
+                        .trustManager(InsecureTrustManagerFactory.INSTANCE)
+                        .build();
+                HttpClient httpClient = HttpClient.create().secure(t -> t.sslContext(sslContext));
 
-            Gson gson = new Gson();
+                WebClient.Builder clientBuilder = WebClient.builder()
+                        .baseUrl(aditoUrl)
+                        .clientConnector(new ReactorClientHttpConnector(httpClient))
+                        .defaultHeaders(headers -> headers.setBasicAuth("flowableIdmService", "HczABCxBEUKSmwQEnT8vbmkE8Bj1hcXOKSbsLWBg"))
+                        .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
 
-            WebClient.RequestHeadersSpec<?> spec = clientBuilder.build().get()
-                    .uri("/services/rest/workflowServiceTasks_rest");
-            String wsResult = spec.retrieve().bodyToMono(String.class).block();
+                Gson gson = new Gson();
 
-            ProcessWrapper[] wsProcesses = gson.fromJson(wsResult, ProcessWrapper[].class);
-            Arrays.stream(wsProcesses).forEach(wsProcess -> processes.put(wsProcess.id, wsProcess.name));
+                WebClient.RequestHeadersSpec<?> spec = clientBuilder.build().get()
+                        .uri("/services/rest/workflowServiceTasks_rest");
+                String wsResult = spec.retrieve().bodyToMono(String.class).block();
 
-        } catch (Exception e) {
-            e.printStackTrace();
+                ProcessWrapper[] wsProcesses = gson.fromJson(wsResult, ProcessWrapper[].class);
+                Arrays.stream(wsProcesses).forEach(wsProcess -> processes.put(wsProcess.id, wsProcess.name));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         return processes;
     }
 
-    private class ProcessWrapper {
+    private static class ProcessWrapper {
         String id;
         String name;
-
-        public String getId() {
-            return id;
-        }
-
-        public String getName() {
-            return name;
-        }
     }
 
 }
