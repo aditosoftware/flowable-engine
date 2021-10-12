@@ -60,9 +60,9 @@ public class ApiModelsResource {
     }
 
     @PostMapping(value = "/editor/import-process-xml", produces = "application/json", consumes = "text/plain")
-    public ModelRepresentation importProcessXML (HttpServletRequest request, @RequestBody String processXML)
+    public ModelRepresentation importProcessXML (HttpServletRequest request, @RequestBody String processXML, @RequestParam(required = false) String userName)
     {
-        return modelQueryService.importProcessXML(request, processXML);
+        return modelQueryService.importProcessXML(request, processXML, userName);
     }
 
     @PostMapping(value = "/editor/models", produces = "application/json")

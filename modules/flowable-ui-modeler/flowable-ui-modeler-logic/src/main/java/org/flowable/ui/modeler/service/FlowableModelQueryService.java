@@ -17,7 +17,9 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.stream.XMLInputFactory;
@@ -48,6 +50,7 @@ import org.flowable.ui.modeler.model.ModelRepresentation;
 import org.flowable.ui.modeler.repository.ModelRepository;
 import org.flowable.ui.modeler.repository.ModelSort;
 import org.flowable.ui.modeler.serviceapi.ModelService;
+import org.flowable.ui.modeler.model.ModelKeyRepresentation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -217,7 +220,7 @@ public class FlowableModelQueryService {
         }
     }
 
-    public ModelRepresentation importProcessXML (HttpServletRequest request, String processXML)
+    public ModelRepresentation importProcessXML (HttpServletRequest request, String processXML, String userName)
     {
         try {
             XMLInputFactory xif = XmlUtil.createSafeXmlInputFactory();
@@ -247,7 +250,37 @@ public class FlowableModelQueryService {
             model.setName(name);
             model.setDescription(description);
             model.setModelType(AbstractModel.MODEL_TYPE_BPMN);
-            Model newModel = modelService.createModel(model, modelNode.toString(), SecurityUtils.getCurrentUserObject());
+            if (userName != null && !userName.isEmpty())
+            {
+                model.setCreatedBy(userName);
+                model.setLastUpdatedBy(userName);
+            }
+            Model newModel = new Model();
+
+            ModelKeyRepresentation modelKeyRepresentation = modelService.validateModelKey(null, model.getModelType(), model.getKey());
+            if (modelKeyRepresentation.isKeyAlreadyExists())
+            {
+                List<Model> existingModels = modelRepository.findByKeyAndType(model.getKey(), model.getModelType());
+                Optional<Model> optLatestModel = existingModels.stream().max((modelA, modelB) -> modelA.getVersion() - modelB.getVersion());
+                if (optLatestModel.isPresent())
+                {
+                    Model existingModel = optLatestModel.get();
+                    existingModel.setName(model.getName());
+                    existingModel.setKey(model.getKey());
+                    existingModel.setModelType(model.getModelType());
+                    existingModel.setDescription(model.getDescription());
+                    existingModel.setModelEditorJson(modelNode.toString());
+                    existingModel.setLastUpdated(Calendar.getInstance().getTime());
+                    if (model.getLastUpdatedBy() != null && !model.getLastUpdatedBy().isEmpty())
+                        existingModel.setLastUpdatedBy(model.getLastUpdatedBy());
+                    existingModel.setTenantId(model.getTenantId());
+
+                    newModel = modelService.createNewModelVersion(existingModel, existingModel.getComment(), SecurityUtils.getCurrentUserObject());
+                }
+            }
+            else
+                newModel = modelService.createModel(model, modelNode.toString(), SecurityUtils.getCurrentUserObject());
+
             return new ModelRepresentation(newModel);
 
         } catch (BadRequestException e) {

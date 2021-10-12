@@ -28,10 +28,9 @@ public class DeploymentResource {
         return aditoDeploymentService.deployProcess(new String(processModelXML));
     }
 
-    @GetMapping(value = "/rest/adito-process-definition-url")
+    @GetMapping(value = "/rest/adito-process-definition-url", produces = "text/plain")
     public String getAditoProcessDefinitionUrl ()
     {
-        System.out.println("procdef url: " + aditoDeploymentService.getProcessDefinitionUrl());
         return aditoDeploymentService.getProcessDefinitionUrl();
     }
 }

@@ -12,20 +12,19 @@ angular.module('flowableModeler').service('DeploymentService', ['$http',
         };
     }]);
 
-angular.module('flowableModeler').service('AditoUrlService', ['$http',
-    function ($http)
+angular.module('flowableModeler').service('AditoUrlService', ['$http', '$window',
+    function ($http, $window)
     {
-        this.getAditoProcessDefinitionUrl = function ()
+        this.openProcessDefinitionUrl = function ()
         {
-            var url = null;
             $http({method: 'GET', url: FLOWABLE.APP_URL.getAditoProcessDefinitionUrl()})
-                .success(function(data)
+                .success(function(aditoUrl)
                 {
-                console.log("sucess: " + data);
-                    url = data;
+                    if (aditoUrl)
+                        $window.open(aditoUrl, "_self");
                 })
                 .error(function(data, status, headers, config) {});
-                console.log("url: " + url);
+
             return url;
         };
     }]);

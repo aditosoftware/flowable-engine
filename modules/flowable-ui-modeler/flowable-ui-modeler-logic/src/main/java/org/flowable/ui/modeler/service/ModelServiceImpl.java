@@ -383,7 +383,8 @@ public class ModelServiceImpl implements ModelService {
 
     protected AbstractModel internalCreateNewModelVersion(Model modelObject, String comment, User updatedBy, boolean returnModelHistory) {
         modelObject.setLastUpdated(new Date());
-        modelObject.setLastUpdatedBy(updatedBy.getId());
+        if (updatedBy != null)
+            modelObject.setLastUpdatedBy(updatedBy.getId());
         modelObject.setComment(comment);
 
         ModelHistory historyModel = createNewModelhistory(modelObject);
@@ -438,7 +439,8 @@ public class ModelServiceImpl implements ModelService {
 
             modelObject.setVersion(modelObject.getVersion() + 1);
             modelObject.setLastUpdated(new Date());
-            modelObject.setLastUpdatedBy(updatedBy.getId());
+            if (updatedBy != null)
+                modelObject.setLastUpdatedBy(updatedBy.getId());
             modelObject.setName(name);
             modelObject.setKey(key);
             modelObject.setDescription(description);

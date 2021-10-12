@@ -6,7 +6,8 @@
             "CASEMODELS": "Case models",
             "FORMS": "Forms",
             "DECISION-TABLES": "Decision Tables",
-            "APPS": "Apps"
+            "APPS": "Apps",
+            "PROCESS-DEFINITIONS" : "Workflow definitions"
         },
         "TITLE": {
             "SELECT-GROUP" :"Select group",

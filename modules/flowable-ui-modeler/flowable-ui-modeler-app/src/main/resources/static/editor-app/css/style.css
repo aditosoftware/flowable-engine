@@ -271,7 +271,7 @@ div.propertySection {
     border: 0;
     margin: 0;
     padding: 0;
-    font-size: 13px;
+    font-size: 14px;
     overflow: hidden;
 }
 
@@ -310,13 +310,13 @@ div.propertySection {
 }
 
 .property-row span.title {
-    font-size: 13px;
+    font-size: 14px;
     font-weight: bold;
     width: 46%;
 }
 
 .property-row span.title-removed {
-    font-size: 13px;
+    font-size: 14px;
     font-weight: normal;
     width: 46%;
 }
@@ -629,7 +629,7 @@ li.x-menu-list-item.x-menu-item-active a {
 }
 
 .decision-table-grid {
-    font-size: 13px;
+    font-size: 14px;
     line-height: 20px
 }
 
@@ -854,7 +854,7 @@ hot-table .column-header.label {
 }
 
 #decisionTableGrid th .input-header .header-variable-type, #decisionTableGrid th .output-header .header-variable-type {
-    font-size: 13px;
+    font-size: 14px;
     font-style: italic;
     text-align: center;
 }

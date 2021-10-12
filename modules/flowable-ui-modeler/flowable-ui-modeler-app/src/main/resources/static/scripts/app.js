@@ -157,8 +157,8 @@ flowableModeler
         .determinePreferredLanguage();
 
   }])
-  .run(['$rootScope', '$timeout', '$modal', '$translate', '$location', '$http', '$window', 'appResourceRoot',
-        function($rootScope, $timeout, $modal, $translate, $location, $http, $window, appResourceRoot) {
+  .run(['$rootScope', '$timeout', '$modal', '$translate', '$location', '$http', '$window', 'appResourceRoot', 'AditoUrlService',
+        function($rootScope, $timeout, $modal, $translate, $location, $http, $window, appResourceRoot, AditoUrlService) {
 
             // set angular translate fallback language
             $translate.fallbackLanguage(['en']);
@@ -202,7 +202,13 @@ flowableModeler
                     'id': 'processes',
                     'title': 'GENERAL.NAVIGATION.PROCESSES',
                     'path': '/processes'
-                }/*,
+                },
+                {
+                    'id': 'process-definitions',
+                    'title': 'GENERAL.NAVIGATION.PROCESS-DEFINITIONS',
+                    'onOpen': AditoUrlService.openProcessDefinitionUrl
+                }
+                /*,
                 {
                     'id': 'casemodels',
                     'title': 'GENERAL.NAVIGATION.CASEMODELS',
@@ -244,8 +250,15 @@ flowableModeler
              * this is a no-op.
              */
             $rootScope.setMainPage = function(mainPage) {
-                $rootScope.mainPage = mainPage;
-                $location.path($rootScope.mainPage.path);
+                if (mainPage.onOpen)
+                {
+                    mainPage.onOpen();
+                }
+                else
+                {
+                    $rootScope.mainPage = mainPage;
+                    $location.path($rootScope.mainPage.path);
+                }
             };
 
             /*
@@ -255,7 +268,10 @@ flowableModeler
             $rootScope.setMainPageById = function(mainPageId) {
                 for (var i=0; i<$rootScope.mainNavigation.length; i++) {
                     if (mainPageId == $rootScope.mainNavigation[i].id) {
-                        $rootScope.mainPage = $rootScope.mainNavigation[i];
+                        if ($rootScope.mainNavigation[i].onOpen)
+                            $rootScope.mainNavigation[i].onOpen();
+                        else
+                            $rootScope.mainPage = $rootScope.mainNavigation[i];
                         break;
                     }
                 }

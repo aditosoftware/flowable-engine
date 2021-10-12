@@ -363,7 +363,6 @@ public abstract class BaseBpmnXMLConverter implements BpmnXMLConstants {
                     writeDefaultAttribute(ATTRIBUTE_FORM_VARIABLE, property.getVariable(), xtw);
                     writeDefaultAttribute(ATTRIBUTE_FORM_DEFAULT, property.getDefaultExpression(), xtw);
                     writeDefaultAttribute(ATTRIBUTE_FORM_DATEPATTERN, property.getDatePattern(), xtw);
-                    System.out.println("visibilityExpression: " + property.getVisibilityExpression());
                     writeDefaultAttribute(ATTRIBUTE_FORM_VISIBILITYEXPRESSION, property.getVisibilityExpression(), xtw);
                     if (!property.isReadable()) {
                         writeDefaultAttribute(ATTRIBUTE_FORM_READABLE, ATTRIBUTE_VALUE_FALSE, xtw);

@@ -1,7 +1,6 @@
 package org.flowable.aditoDataService;
 
 import com.google.gson.Gson;
-import jdk.internal.joptsimple.internal.Strings;
 import org.flowable.aditoDataService.Model.ProcessRepresentation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -11,7 +10,7 @@ import reactor.core.publisher.Mono;
 @Service
 public class AditoDeploymentService extends BaseAditoDataService
 {
-    @Value("${aditoProcessDefinitionUrl:#{null}}")
+    @Value("${aditoProcessDefinitionUrl:/client/WorkflowDefinition/filter}")
     private String aditoProcessDefinitionUrl;
 
     public ProcessRepresentation deployProcess (String pProcessModelXML)
@@ -38,9 +37,6 @@ public class AditoDeploymentService extends BaseAditoDataService
 
     public String getProcessDefinitionUrl ()
     {
-        if (Strings.isNullOrEmpty(aditoProcessDefinitionUrl))
-            return aditoBaseUrl.replace("host.docker.internal", "localhost") + "/client/WorkflowDefinition/filter";
-
-        return aditoProcessDefinitionUrl;
+        return aditoBaseUrl.replace("host.docker.internal", "localhost") + aditoProcessDefinitionUrl;
     }
 }

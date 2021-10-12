@@ -6,7 +6,8 @@
          "CASEMODELS":"Fallmodelle",
          "FORMS":"Formulare",
          "DECISION-TABLES":"Entscheidungstabellen",
-         "APPS":"Apps"
+         "APPS":"Apps",
+         "PROCESS-DEFINITIONS" : "Workflowdefinitionen"
       },
       "TITLE":{
          "SELECT-GROUP":"Gruppe auswÃ¤hlen",
@@ -27,7 +28,7 @@
          "CONFIRM-AND-CLOSE":"BestÃ¤tigen und schlieÃŸen",
          "NEW-FORM":"Neue Form",
          "CREATE-FORM":"Formular erstellen",
-         "NEW-DECISION-TABLE":"Neuer-Beschluss-Tisch",
+         "NEW-DECISION-TABLE":"Neue Entscheidungstabelle",
          "CREATE-DECISION-TABLE":"Entscheidungstabelle erstellen"
       },
       "MESSAGE":{
