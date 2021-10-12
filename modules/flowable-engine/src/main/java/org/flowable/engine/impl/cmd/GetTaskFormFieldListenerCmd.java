@@ -4,6 +4,7 @@ import org.flowable.common.engine.api.FlowableException;
 import org.flowable.common.engine.api.FlowableObjectNotFoundException;
 import org.flowable.common.engine.impl.interceptor.Command;
 import org.flowable.common.engine.impl.interceptor.CommandContext;
+import org.flowable.engine.TaskService;
 import org.flowable.engine.impl.form.FormHandlerHelper;
 import org.flowable.engine.impl.form.TaskFormHandler;
 import org.flowable.engine.impl.util.CommandContextUtil;
@@ -26,7 +27,7 @@ public class GetTaskFormFieldListenerCmd implements Command<List<String>>, Seria
 
     @Override
     public List<String> execute(CommandContext commandContext) {
-        TaskEntity task = CommandContextUtil.getTaskService().getTask(taskId);
+        TaskEntity task = CommandContextUtil.getProcessEngineConfiguration(commandContext).getTaskServiceConfiguration().getTaskService().getTask(taskId);
         if (task == null) {
             throw new FlowableObjectNotFoundException("No task found for taskId '" + taskId + "'", Task.class);
         }

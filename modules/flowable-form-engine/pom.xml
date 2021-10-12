@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
 	<name>Flowable - Form Engine</name>
-	<groupId>de.adito.aditoweb</groupId>
+	<groupId>org.flowable</groupId>
 	<artifactId>flowable-form-engine</artifactId>
 
 	<parent>

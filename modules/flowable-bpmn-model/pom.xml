@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <name>Flowable - BPMN Model</name>
-  <groupId>de.adito.aditoweb</groupId>
+  <groupId>org.flowable</groupId>
   <artifactId>flowable-bpmn-model</artifactId>
 
   <parent>

@@ -13,39 +13,36 @@
 
 package org.flowable.idm.engine.impl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.google.gson.Gson;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import org.flowable.common.engine.api.FlowableIllegalArgumentException;
-import org.flowable.common.engine.api.query.QueryCacheValues;
+import org.flowable.common.engine.api.query.CacheAwareQuery;
 import org.flowable.common.engine.impl.interceptor.CommandContext;
 import org.flowable.common.engine.impl.interceptor.CommandExecutor;
 import org.flowable.common.engine.impl.query.AbstractQuery;
 import org.flowable.idm.api.Group;
 import org.flowable.idm.api.GroupQuery;
 import org.flowable.idm.api.GroupQueryProperty;
-import org.flowable.idm.api.User;
+import org.flowable.idm.engine.impl.persistence.entity.GroupEntity;
 import org.flowable.idm.engine.impl.persistence.entity.GroupEntityImpl;
-import org.flowable.idm.engine.impl.persistence.entity.UserEntityImpl;
-import org.flowable.idm.engine.impl.util.CommandContextUtil;
 import org.flowable.idm.engine.impl.ws.GroupWrapper;
-import org.flowable.idm.engine.impl.ws.UserWrapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.netty.http.client.HttpClient;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * @author Joram Barrez
  */
-public class GroupQueryImpl extends AbstractQuery<GroupQuery, Group> implements GroupQuery, QueryCacheValues {
+public class GroupQueryImpl extends AbstractQuery<GroupQuery, Group> implements GroupQuery, CacheAwareQuery<GroupEntity> {
 
     private static final long serialVersionUID = 1L;
     protected String id;
