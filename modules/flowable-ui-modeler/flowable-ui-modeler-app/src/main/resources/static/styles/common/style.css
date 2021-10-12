@@ -4,7 +4,7 @@
   - Header: #323e4f
   - Subheader: #e8edf1
   - Subheader border: #a4acb9
-  - Highlight buttons/text: #2980b9
+  - Highlight buttons/text: #3498db
   - Text color: #1a1a1a
   - Filter color: #373e48
   - Dark highlight: #606b7d
@@ -22,17 +22,17 @@
 }
 
 @font-face {
-    font-family: 'Titillium Web';
+    font-family: 'Hind';
     font-style: normal;
     font-weight: normal;
-    url('../../fonts/TitilliumWeb-Regular.ttf') format('truetype');
+    url('../../fonts/Hind-Regular.ttf') format('truetype');
 }
 
 @font-face {
-    font-family: 'Titillium Web';
+    font-family: 'Hind';
     font-style: normal;
     font-weight: bold;
-    url('../../fonts/TitilliumWeb-Bold.ttf') format('truetype');
+    url('../../fonts/Hind-Bold.ttf') format('truetype');
 }
 
 .form-control {
@@ -44,7 +44,7 @@
 
 body,
 body pre {
-    font-family: 'Titillium Web', sans-serif;
+    font-family: 'Hind', sans-serif;
 }
 
 body pre {
@@ -54,7 +54,7 @@ body pre {
 }
 
 hr {
-	border-top: 1px solid #606b7d; 
+	border-top: 1px solid #606b7d;
 }
 
 .form-wrapper textarea {
@@ -206,14 +206,14 @@ label {
 
 /** Buttons **/
 button.btn, a.btn {
-    background-color: #2980b9;
+    background-color: #3498db;
     color: #ffffff;
     border-color: #ffffff;
     font-size: 15px;
 }
 
 button.btn-subtle, a.btn-subtle {
-    background-color: #fafafb;
+    background-color: #ffffff;
     color: #1a1a1a;
     font-size: 15px;
 }
@@ -317,7 +317,7 @@ button.btn.btn-danger {
 }
 
 .dropdown-menu > li > a:hover, .dropdown-menu > ul > li > a:hover {
-    background: #2980b9;
+    background: #3498db;
     color: #ffffff;
 }
 
@@ -349,7 +349,7 @@ a.dropdown-toggle {
 }
 
 .open a.dropdown-toggle, a.dropdown-toggle:hover {
-    color: #2980b9;
+    color: #3498db;
 }
 
 .btn-group.open .dropdown-toggle {
@@ -586,14 +586,14 @@ a.dropdown-toggle {
 
 
 .navbar-nav > li.active > a {
-    color: #2980b9;
+    color: #3498db;
 }
 
 /* Sub header */
 .subheader {
-    background-color: #e8edf1;
+    background-color: #f9f9f9;
     min-height: 60px;
-    border-bottom: 1px solid #a4acb9;
+    border-bottom: 1px solid #d0d0d0;
 }
 
 .subheader > div > .btn-group {
@@ -601,7 +601,7 @@ a.dropdown-toggle {
 }
 
 .subheader h2 {
-    font-family: 'Titillium Web', sans-serif;
+    font-family: 'Hind', sans-serif;
     color: #1a1a1a;
     font-size: 20px;
     font-weight: normal;
@@ -611,20 +611,20 @@ a.dropdown-toggle {
 
 .subheader  .version {
     font-weight: bold;
-    color: #2980b9;
+    color: #3498db;
     font-size: 110%;
     padding-left: 5px;
     line-height: 1;
     padding-right: 5px;
-    border-right: 1px solid #a4acb9;
+    border-right: 1px solid #d0d0d0;
     margin-right: 5px;
 }
 .subheader .btn {
-    border-color: #e8edf1;
+    border-color: #f9f9f9;
 }
 
 .subheader a.btn:hover, .subheader a.btn:focus  {
-    border-color: #e8edf1;
+    border-color: #f9f9f9;
     color: #ffffff;
 }
 
@@ -647,8 +647,8 @@ a.dropdown-toggle {
 .subheader .details.subheader .details {
     margin-bottom: 5px;
     margin-left: -1px;
-    border-right: 1px solid #a4acb9;
-    border-left: 1px solid #a4acb9;
+    border-right: 1px solid #d0d0d0;
+    border-left: 1px solid #d0d0d0;
     padding: 0px 15px 5px 15px;
 }
 
@@ -1280,7 +1280,7 @@ button.selection:active, button.selection:focus {
 }
 
 .list-header .summary .filter-action:hover {
-    color: #2980b9;
+    color: #3498db;
 }
 
 .main-list .list-subheader {
@@ -1324,7 +1324,7 @@ button.selection:active, button.selection:focus {
     padding-right: 0;
     border-radius: 3px;
     background-color: #e8edf1;
-    color: #2980b9;
+    color: #3498db;
     background-color: transparent;
     font-weight: normal;
 
@@ -1332,11 +1332,11 @@ button.selection:active, button.selection:focus {
 
 
 .full-list li.active {
-    background-color: #fafafb;
+    background-color: #ffffff;
 }
 
 .full-list li:hover {
-    background-color: #fafafb;
+    background-color: #ffffff;
 }
 
 .full-list li > div:hover {
@@ -1351,7 +1351,7 @@ button.selection:active, button.selection:focus {
 }
 
 .full-list li.active > div {
-    border-left-color: #2980b9;
+    border-left-color: #3498db;
 }
 
 .full-list li .title {
@@ -1406,7 +1406,7 @@ button.selection:active, button.selection:focus {
 .main-content > .header {
     background-color: #e8edf1;
     min-height: 60px;
-    border-bottom: 1px solid #a4acb9;
+    border-bottom: 1px solid #d0d0d0;
     padding: 15px 15px;
 }
 
@@ -1437,7 +1437,7 @@ button.selection:active, button.selection:focus {
 }
 
 .header .detail a:hover {
-    color: #2980b9;
+    color: #3498db;
     text-decoration: underline;
 }
 
@@ -1469,7 +1469,7 @@ button.selection:active, button.selection:focus {
 
 .jumpers li.selected {
     color: white;
-    background-color: #2980b9;
+    background-color: #3498db;
 }
 
 
@@ -1554,7 +1554,7 @@ h3+div > .dropzone {
 }
 
 .dropzone.dragover {
-    border: 1px dotted #2980b9;
+    border: 1px dotted #3498db;
 }
 
 .dropzone .message {
@@ -1569,7 +1569,7 @@ h3+div > .dropzone {
 }
 
 .dropzone.dragover .message {
-    color: #2980b9;
+    color: #3498db;
     font-size: 20px;
     visibility: inherit;
 }
@@ -1686,8 +1686,7 @@ h3+div > .dropzone {
 
 .modal-backdrop {
     background-color: #999999; /** Non alpha-supporting browser fallback */
-    background-color: rgba(100, 100, 100, .75);
-    background-image: url('../../images/glasspane.png');
+    background-color: rgba(48, 48, 48, .75);
 }
 .modal-content {
     -webkit-border-radius: 0;
@@ -1711,7 +1710,7 @@ h3+div > .dropzone {
     position: relative;
     background-color: #e8edf1;
     min-height: 60px;
-    border-bottom: 1px solid #a4acb9;
+    border-bottom: 1px solid #d0d0d0;
     padding: 15px 15px;
 }
 
@@ -1812,7 +1811,7 @@ h3+div > .dropzone {
 }
 
 .dropdown-menu.datepicker th .btn:hover, .dropdown-menu.datepicker th .btn:focus {
-    color: #2980b9;
+    color: #3498db;
 }
 
 .dropdown-menu.datepicker .calendar-grid .btn:hover, .dropdown-menu.datepicker .calendar-grid .btn:focus {
@@ -1826,7 +1825,7 @@ h3+div > .dropzone {
 }
 
 .dropdown-menu.datepicker .calendar-grid .btn-primary, .dropdown-menu.datepicker .calendar-grid .btn-primary:hover, .dropdown-menu.datepicker .calendar-grid .btn-primary:focus {
-    background-color: #2980b9;
+    background-color: #3498db;
     color: #ffffff;
 }
 
@@ -1953,7 +1952,7 @@ h3+div > .dropzone {
 }
 
 .crumb:hover {
-    color: #2980b9;
+    color: #3498db;
     text-decoration: underline;
 }
 .crumb:hover i {
@@ -2862,7 +2861,7 @@ ul#strength > li:last-child {
     margin: 0 2px 0 0;
     overflow: hidden;
     color: #ffffff;
-    background: #2980b9 no-repeat center center;
+    background: #3498db no-repeat center center;
     background-size: 32px 32px;
     cursor: pointer;
     border: 1px solid transparent;
@@ -2873,7 +2872,7 @@ ul#strength > li:last-child {
 }
 
 .user-picture.no-picture {
-    border-color: #2980b9;
+    border-color: #3498db;
 }
 
 .user-picture span {
@@ -3097,7 +3096,7 @@ ul#strength > li:last-child {
 }
 
 .help-entry:hover > span {
-    color: #2980b9;
+    color: #3498db;
 }
 
 .help-entry.active:hover > span {

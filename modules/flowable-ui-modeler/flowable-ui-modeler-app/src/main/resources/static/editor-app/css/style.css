@@ -117,7 +117,7 @@
     list-style-position: outside;
     margin: 0px 0px 5px 15px;
     background-color: #ffffff;
-    font-family: Arial, Regular;
+    font-family: Hind, Regular;
     font-size: 14px;
     color: #323437;
 }
@@ -165,7 +165,7 @@
 
 .root-stencil-item {
     margin: 0 0 0 15px;
-    font-family: Arial, Regular;
+    font-family: Hind, Regular;
     font-size: 14px;
 }
 
@@ -179,7 +179,7 @@
 -------------------------------- */
 div.canvas-wrapper {
     overflow: auto;
-    background-color: #F8F8F8;
+    background-color: #F3F3F3;
 }
 
 .canvas_resize_indicator i {
@@ -1172,7 +1172,7 @@ hot-table .column-header.label {
 }
 
 .process-treeview-header {
-    background: #2980b9;
+    background: #3498db;
     color: white;
     border: 1px solid #bbbbbb;
     padding: 2px;
