@@ -35,7 +35,8 @@ import org.springframework.web.servlet.DispatcherServlet;
         "org.flowable.ui.common.service",
         "org.flowable.ui.common.repository",
         "org.flowable.ui.common.security",
-        "org.flowable.ui.common.tenant" })
+        "org.flowable.ui.common.tenant",
+        "org.flowable.aditoDataService"})
 public class ApplicationConfiguration {
 
     @Bean

@@ -110,7 +110,12 @@
             <artifactId>javax.servlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
-	   
+
+		<dependency>
+			<groupId>org.flowable</groupId>
+			<artifactId>adito-data-service</artifactId>
+			<version>6.5.0.1</version>
+		</dependency>
 	</dependencies>
 
 	<!-- BUILD -->

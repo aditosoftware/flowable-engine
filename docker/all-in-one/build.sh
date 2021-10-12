@@ -1,4 +1,5 @@
 #!/bin/sh
+dir >> log.txt
 BASE_PWD="$PWD"
 FLOWABLE_VERSION=6.5.0
 
@@ -28,34 +29,6 @@ if [ $STATUS -eq 0 ]
 then
     echo "Copying artifact"
 	cp flowable-ui-modeler-app/target/*.original $BASE_PWD/assets/
-else
-    echo "Error while building root pom. Halting."
-fi
-
-cd $BASE_PWD
-
-echo "Building Flowable Task"
-cd ../../modules/flowable-ui-task
-mvn -T 1C clean install -DskipTests -Pdocker-deps
-STATUS=$?
-if [ $STATUS -eq 0 ]
-then
-    echo "Copying artifact"
-	cp flowable-ui-task-app/target/*.original $BASE_PWD/assets/
-else
-    echo "Error while building root pom. Halting."
-fi
-
-cd $BASE_PWD
-
-echo "Building Flowable Admin"
-cd ../../modules/flowable-ui-admin
-mvn -T 1C clean install -DskipTests -Pdocker-deps
-STATUS=$?
-if [ $STATUS -eq 0 ]
-then
-    echo "Copying artifact"
-	cp flowable-ui-admin-app/target/*.original $BASE_PWD/assets/
 else
     echo "Error while building root pom. Halting."
 fi

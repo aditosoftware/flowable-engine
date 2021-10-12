@@ -13,6 +13,8 @@
 package org.flowable.ui.modeler.service;
 
 import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -212,6 +214,48 @@ public class FlowableModelQueryService {
             }
         } else {
             throw new BadRequestException("Invalid file name, only .bpmn and .bpmn20.xml files are supported not " + fileName);
+        }
+    }
+
+    public ModelRepresentation importProcessXML (HttpServletRequest request, String processXML)
+    {
+        try {
+            XMLInputFactory xif = XmlUtil.createSafeXmlInputFactory();
+            Reader xmlIn = new StringReader(processXML);
+            XMLStreamReader xtr = xif.createXMLStreamReader(xmlIn);
+            BpmnModel bpmnModel = bpmnXmlConverter.convertToBpmnModel(xtr);
+            if (CollectionUtils.isEmpty(bpmnModel.getProcesses())) {
+                throw new BadRequestException("No process found in definition");
+            }
+
+            if (bpmnModel.getLocationMap().size() == 0) {
+                BpmnAutoLayout bpmnLayout = new BpmnAutoLayout(bpmnModel);
+                bpmnLayout.execute();
+            }
+
+            ObjectNode modelNode = bpmnJsonConverter.convertToJson(bpmnModel);
+
+            org.flowable.bpmn.model.Process process = bpmnModel.getMainProcess();
+            String name = process.getId();
+            if (StringUtils.isNotEmpty(process.getName())) {
+                name = process.getName();
+            }
+            String description = process.getDocumentation();
+
+            ModelRepresentation model = new ModelRepresentation();
+            model.setKey(process.getId());
+            model.setName(name);
+            model.setDescription(description);
+            model.setModelType(AbstractModel.MODEL_TYPE_BPMN);
+            Model newModel = modelService.createModel(model, modelNode.toString(), SecurityUtils.getCurrentUserObject());
+            return new ModelRepresentation(newModel);
+
+        } catch (BadRequestException e) {
+            throw e;
+
+        } catch (Exception e) {
+            LOGGER.error("Import failed");
+            throw new BadRequestException("Import failed, error message " + e.getMessage());
         }
     }
     

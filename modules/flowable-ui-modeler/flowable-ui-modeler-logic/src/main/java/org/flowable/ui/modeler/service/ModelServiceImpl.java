@@ -325,11 +325,11 @@ public class ModelServiceImpl implements ModelService {
         newModel.setKey(model.getKey());
         newModel.setModelType(model.getModelType());
         newModel.setCreated(Calendar.getInstance().getTime());
-        newModel.setCreatedBy(createdBy.getId());
+        newModel.setCreatedBy(createdBy == null ? model.getCreatedBy() : createdBy.getId());
         newModel.setDescription(model.getDescription());
         newModel.setModelEditorJson(editorJson);
         newModel.setLastUpdated(Calendar.getInstance().getTime());
-        newModel.setLastUpdatedBy(createdBy.getId());
+        newModel.setLastUpdatedBy(createdBy == null ? model.getLastUpdatedBy() : createdBy.getId());
         newModel.setTenantId(model.getTenantId());
 
         persistModel(newModel);

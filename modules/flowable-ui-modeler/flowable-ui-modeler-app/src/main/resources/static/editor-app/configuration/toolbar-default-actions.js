@@ -310,8 +310,8 @@ FLOWABLE.TOOLBAR = {
 };
 
 /** Custom controller for the save dialog */
-angular.module('flowableModeler').controller('SaveModelCtrl', [ '$rootScope', '$scope', '$http', '$route', '$location', 'editorManager',
-    function ($rootScope, $scope, $http, $route, $location, editorManager) {
+angular.module('flowableModeler').controller('SaveModelCtrl', [ '$rootScope', '$scope', '$http', '$route', '$location', 'editorManager', '$window', 'AditoUrlService'
+    function ($rootScope, $scope, $http, $route, $location, editorManager, $window, AditoUrlService) {
 
 	if (editorManager.getCurrentModelId() != editorManager.getModelId()) {
 		editorManager.edit(editorManager.getModelId());
@@ -353,6 +353,25 @@ angular.module('flowableModeler').controller('SaveModelCtrl', [ '$rootScope', '$
         	}
         	$location.path('/processes');
     	});
+    };
+
+    $scope.saveAndDeploy = function ()
+    {
+        $scope.save(function ()
+        {
+            $http({method: 'POST', url: FLOWABLE.APP_URL.getProcessDeployUrl(editorManager.getModelId())})
+                .success(function(data)
+                {
+                    var aditoUrl = AditoUrlService.getAditoProcessDefinitionUrl();
+                    //if a deployment id is present, the deploy was successful
+                    if (data && data.deploymentId && aditoUrl)
+                        $window.open(aditoUrl, "_self");
+                })
+                .error(function(data, status, headers, config)
+                {
+
+                });
+        });
     };
     
     $scope.save = function (successCallback) {

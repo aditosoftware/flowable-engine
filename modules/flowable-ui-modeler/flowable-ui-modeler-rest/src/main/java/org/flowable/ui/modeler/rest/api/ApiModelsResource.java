@@ -59,6 +59,12 @@ public class ApiModelsResource {
         return modelQueryService.importProcessModel(request, file);
     }
 
+    @PostMapping(value = "/editor/import-process-xml", produces = "application/json", consumes = "text/plain")
+    public ModelRepresentation importProcessXML (HttpServletRequest request, @RequestBody String processXML)
+    {
+        return modelQueryService.importProcessXML(request, processXML);
+    }
+
     @PostMapping(value = "/editor/models", produces = "application/json")
     public ModelRepresentation createModel(@RequestBody ModelRepresentation modelRepresentation) {
         modelRepresentation.setKey(modelRepresentation.getKey().replaceAll(" ", ""));

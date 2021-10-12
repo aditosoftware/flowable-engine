@@ -1,4 +1,4 @@
-package org.flowable.ui.common.model;
+package org.flowable.aditoDataService.Model;
 
 import java.util.List;
 

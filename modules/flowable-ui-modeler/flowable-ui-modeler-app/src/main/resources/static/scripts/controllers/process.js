@@ -11,8 +11,8 @@
  * limitations under the License.
  */
 angular.module('flowableModeler')
-  .controller('ProcessCtrl', ['$rootScope', '$scope', '$translate', '$http', '$location', '$routeParams','$modal', '$popover', '$timeout', 'appResourceRoot', 'ResourceService',
-                              function ($rootScope, $scope, $translate, $http, $location, $routeParams, $modal, $popover, $timeout, appResourceRoot, ResourceService) {
+  .controller('ProcessCtrl', ['$rootScope', '$scope', '$translate', '$http', '$location', '$routeParams','$modal', '$popover', '$timeout', 'appResourceRoot', 'ResourceService', 'DeploymentService',
+                              function ($rootScope, $scope, $translate, $http, $location, $routeParams, $modal, $popover, $timeout, appResourceRoot, ResourceService, DeploymentService) {
 
     // Main page (needed for visual indicator of current page)
     $rootScope.setMainPageById('processes');
@@ -168,6 +168,23 @@ angular.module('flowableModeler')
           $scope.$on('$destroy', destroy);
         }
     };
+
+    $scope.deployProcess = function ()
+    {
+        $http({method: 'POST', url: FLOWABLE.APP_URL.getProcessDeployUrl($scope.model.latestModelId)})
+            .success(function(data)
+            {
+                //if a deployment id is present, the deploy was successful
+                if (data && data.deploymentId)
+                    $scope.addAlertPromise($translate('PROCESS.ALERT.DEPLOY-CONFIRM'), 'info');
+                else
+                    $scope.addAlertPromise($translate('PROCESS.ERROR.DEPLOY-FAILURE'), 'error');
+            })
+            .error(function(data, status, headers, config)
+            {
+                $scope.addAlertPromise($translate('PROCESS.ERROR.DEPLOY-FAILURE'), 'error');
+            });
+    }
     
     $scope.loadProcess();
 }]);
