@@ -49,6 +49,7 @@ public class FormPropertyParser extends BaseChildElementParser {
         property.setId(xtr.getAttributeValue(null, ATTRIBUTE_FORM_ID));
         property.setName(xtr.getAttributeValue(null, ATTRIBUTE_FORM_NAME));
         property.setType(xtr.getAttributeValue(null, ATTRIBUTE_FORM_TYPE));
+        property.setVisibilityExpression(xtr.getAttributeValue(null, ATTRIBUTE_FORM_VISIBILITYEXPRESSION));
         property.setVariable(xtr.getAttributeValue(null, ATTRIBUTE_FORM_VARIABLE));
         property.setExpression(xtr.getAttributeValue(null, ATTRIBUTE_FORM_EXPRESSION));
         property.setDefaultExpression(xtr.getAttributeValue(null, ATTRIBUTE_FORM_DEFAULT));

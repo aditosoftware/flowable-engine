@@ -26,10 +26,21 @@ public class FormProperty extends BaseElement {
     protected String type;
     protected String defaultExpression;
     protected String datePattern;
+    protected String visibilityExpression;
     protected boolean readable = true;
     protected boolean writeable = true;
     protected boolean required;
     protected List<FormValue> formValues = new ArrayList<>();
+
+    public String getVisibilityExpression()
+    {
+        return visibilityExpression;
+    }
+
+    public void setVisibilityExpression(String visibilityExpression)
+    {
+        this.visibilityExpression = visibilityExpression;
+    }
 
     public String getName() {
         return name;
@@ -129,6 +140,7 @@ public class FormProperty extends BaseElement {
         setReadable(otherProperty.isReadable());
         setWriteable(otherProperty.isWriteable());
         setRequired(otherProperty.isRequired());
+        setVisibilityExpression(otherProperty.getVisibilityExpression());
 
         formValues = new ArrayList<>();
         if (otherProperty.getFormValues() != null && !otherProperty.getFormValues().isEmpty()) {

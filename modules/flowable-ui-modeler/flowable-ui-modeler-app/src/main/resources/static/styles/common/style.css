@@ -1,7 +1,7 @@
 /**
  Colors:
 
-  - Header: #1f3245
+  - Header: #323e4f
   - Subheader: #e8edf1
   - Subheader border: #a4acb9
   - Highlight buttons/text: #2980b9
@@ -499,7 +499,7 @@ a.dropdown-toggle {
 /* Navigation */
 
 .navbar {
-    background-color: #1f3245;
+    background-color: #323e4f;
     border: none;
     min-height: 40px;
 }
@@ -551,7 +551,7 @@ a.dropdown-toggle {
 }
 
 .navbar-inverse .navbar-nav > .active > a {
-	background-color: #1f3245;
+	background-color: #323e4f;
 }
 
 .navbar-nav > li > a {
@@ -571,7 +571,7 @@ a.dropdown-toggle {
     position: absolute;
     pointer-events: none;
     border: 6px solid rgba(0, 0, 0, 0);
-    border-top-color: #1f3245;
+    border-top-color: #323e4f;
     margin-left: -6px;
 }
 

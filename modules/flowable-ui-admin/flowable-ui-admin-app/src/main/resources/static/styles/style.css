@@ -91,14 +91,14 @@ body {
 }
 
 .navbar {
-	background-color: #1f3245;
+	background-color: #323e4f;
 	border: none;
 	min-height: 40px;
 	margin-bottom: 5px;
 }
 
 .nav.navbar-nav {
-	background-color: #1f3245;
+	background-color: #323e4f;
 	color: #eef1f1;
 	border: none;
 }

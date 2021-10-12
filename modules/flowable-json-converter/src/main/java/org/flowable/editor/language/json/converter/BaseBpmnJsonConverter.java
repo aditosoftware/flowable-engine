@@ -441,6 +441,11 @@ public abstract class BaseBpmnJsonConverter implements EditorJsonConstants, Sten
             } else {
                 propertyItemNode.putNull(PROPERTY_FORM_EXPRESSION);
             }
+            if (StringUtils.isNotEmpty(property.getVisibilityExpression())) {
+                propertyItemNode.put(PROPERTY_FORM_VISIBILITYEXPRESSION, property.getVisibilityExpression());
+            } else {
+                propertyItemNode.putNull(PROPERTY_FORM_VISIBILITYEXPRESSION);
+            }
             if (StringUtils.isNotEmpty(property.getVariable())) {
                 propertyItemNode.put(PROPERTY_FORM_VARIABLE, property.getVariable());
             } else {
@@ -701,6 +706,7 @@ public abstract class BaseBpmnJsonConverter implements EditorJsonConstants, Sten
                         formProperty.setName(getValueAsString(PROPERTY_FORM_NAME, formNode));
                         formProperty.setType(getValueAsString(PROPERTY_FORM_TYPE, formNode));
                         formProperty.setExpression(getValueAsString(PROPERTY_FORM_EXPRESSION, formNode));
+                        formProperty.setVisibilityExpression(getValueAsString(PROPERTY_FORM_VISIBILITYEXPRESSION, formNode));
                         formProperty.setVariable(getValueAsString(PROPERTY_FORM_VARIABLE, formNode));
                         formProperty.setDefaultExpression(getValueAsString(PROPERTY_FORM_DEFAULT, formNode));
                         if ("date".equalsIgnoreCase(formProperty.getType())) {

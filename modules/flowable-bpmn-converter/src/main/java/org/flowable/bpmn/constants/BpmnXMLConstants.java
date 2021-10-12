@@ -317,6 +317,7 @@ public interface BpmnXMLConstants {
     public static final String ATTRIBUTE_FORM_NAME = "name";
     public static final String ATTRIBUTE_FORM_TYPE = "type";
     public static final String ATTRIBUTE_FORM_EXPRESSION = "expression";
+    public static final String ATTRIBUTE_FORM_VISIBILITYEXPRESSION = "visibilityExpression";
     public static final String ATTRIBUTE_FORM_VARIABLE = "variable";
     public static final String ATTRIBUTE_FORM_READABLE = "readable";
     public static final String ATTRIBUTE_FORM_WRITABLE = "writable";
