@@ -13,17 +13,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.netty.http.client.HttpClient;
+import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+@Component
 @RestController
 @RequestMapping("/app")
 public class JditoProcessesResource {
 
-    //@Value("#{environment['aditoUrl']}")
-    private String aditoUrl = "https://localhost:8443";
+    @Value("${aditoUrl}")
+    private String aditoUrl;
 
     @GetMapping(value = "/rest/jditoprocesses")
     public Map<String, String> getProcesses() {

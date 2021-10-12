@@ -71,8 +71,8 @@ public class UserQueryImpl extends AbstractQuery<UserQuery, User> implements Use
     protected List<String> groupIds;
     protected String tenantId;
 
-    //@Value("${aditoUrl:hiIamDefault}")
-    private String aditoUrl = "https://localhost:8443";
+    @Value("${aditoUrl}")
+    private String aditoUrl;
 
     public UserQueryImpl() {
     }
@@ -290,7 +290,6 @@ public class UserQueryImpl extends AbstractQuery<UserQuery, User> implements Use
     public List<User> executeList(CommandContext commandContext)
     {
         List<User> users = new ArrayList<>();
-        aditoUrl = "https://localhost:8443";
         System.out.println("aditoUrl is " + aditoUrl);
         if (aditoUrl != null && !aditoUrl.isEmpty()) {
             try {

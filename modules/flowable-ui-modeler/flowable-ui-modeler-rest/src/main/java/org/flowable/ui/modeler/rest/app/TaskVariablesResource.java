@@ -14,16 +14,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.netty.http.client.HttpClient;
+import org.springframework.stereotype.Component;
 import org.flowable.ui.common.model.TaskVariableRepresentation;
 
 import java.util.*;
 
+@Component
 @RestController
 @RequestMapping("/app")
 public class TaskVariablesResource {
 
-    //@Value("#{environment['aditoUrl']}")
-    private String aditoUrl = "https://localhost:8443";
+    @Value("${aditoUrl}")
+    private String aditoUrl;
 
     @GetMapping(value = "/rest/taskvariables")
     public List<TaskVariableRepresentation> getVariables(@RequestParam(value = "jditoProcess", required = false) String jditoProcess,

@@ -60,8 +60,8 @@ public class GroupQueryImpl extends AbstractQuery<GroupQuery, Group> implements 
     protected String userId;
     protected List<String> userIds;
 
-    //@Value("#{environment['aditoUrl']}")
-    private String aditoUrl = "https://localhost:8443";
+    @Value("${aditoUrl}")
+    private String aditoUrl;
 
     public GroupQueryImpl() {
     }
