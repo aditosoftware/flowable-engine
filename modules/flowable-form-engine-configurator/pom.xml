@@ -5,6 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<name>Flowable - Form Engine Configurator</name>
+	<groupId>de.adito.aditoweb</groupId>
 	<artifactId>flowable-form-engine-configurator</artifactId>
 
 	<parent>
@@ -14,6 +15,20 @@
 		<version>6.5.0.27</version>
 	</parent>
 
+	<distributionManagement>
+		<repository>
+			<id>adito.m2</id>
+			<name>releases</name>
+			<url>${repository.releases}</url>
+		</repository>
+		<snapshotRepository>
+			<id>adito.m2</id>
+			<name>snapshots</name>
+			<url>${repository.snapshots}</url>
+			<uniqueVersion>false</uniqueVersion>
+		</snapshotRepository>
+	</distributionManagement>
+
 	<properties>
 		<flowable.artifact>
 			org.flowable.form.engine.configurator
@@ -22,12 +37,14 @@
 	
 	<dependencies>
 		<dependency>
-            <groupId>org.flowable</groupId>
+            <groupId>de.adito.aditoweb</groupId>
             <artifactId>flowable-engine</artifactId>
-        </dependency>
+			<version>${project.version}</version>
+		</dependency>
         <dependency>
-            <groupId>org.flowable</groupId>
+            <groupId>de.adito.aditoweb</groupId>
             <artifactId>flowable-form-engine</artifactId>
+			<version>${project.version}</version>
         </dependency>
 		<dependency>
 			<groupId>com.h2database</groupId>

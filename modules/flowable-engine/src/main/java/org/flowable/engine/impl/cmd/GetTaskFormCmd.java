@@ -14,6 +14,7 @@
 package org.flowable.engine.impl.cmd;
 
 import java.io.Serializable;
+import java.util.Map;
 
 import org.flowable.common.engine.api.FlowableException;
 import org.flowable.common.engine.api.FlowableObjectNotFoundException;
@@ -37,9 +38,15 @@ public class GetTaskFormCmd implements Command<TaskFormData>, Serializable {
 
     private static final long serialVersionUID = 1L;
     protected String taskId;
+    protected Map<String, Object> currentValues;
 
     public GetTaskFormCmd(String taskId) {
         this.taskId = taskId;
+    }
+
+    public GetTaskFormCmd(String taskId, Map<String, Object> currentValues) {
+        this.taskId = taskId;
+        this.currentValues = currentValues;
     }
 
     @Override
@@ -61,7 +68,7 @@ public class GetTaskFormCmd implements Command<TaskFormData>, Serializable {
             throw new FlowableException("No taskFormHandler specified for task '" + taskId + "'");
         }
 
-        return taskFormHandler.createTaskForm(task);
+        return taskFormHandler.createTaskForm(task, currentValues);
     }
 
 }

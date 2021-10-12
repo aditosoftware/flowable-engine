@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.flowable.common.engine.api.delegate.Expression;
@@ -71,19 +73,50 @@ public class DefaultFormHandler implements FormHandler {
                 formPropertyHandler.setDefaultExpression(defaultExpression);
             }
 
+            if (StringUtils.isNotEmpty(formProperty.getVisibilityExpression())) {
+                Expression visibilityExpression = expressionManager.createExpression(formProperty.getVisibilityExpression());
+                formPropertyHandler.setVisibilityExpression(visibilityExpression);
+            }
+
             formPropertyHandlers.add(formPropertyHandler);
         }
     }
 
-    protected void initializeFormProperties(FormDataImpl formData, ExecutionEntity execution) {
+    protected void initializeFormProperties(FormDataImpl formData, ExecutionEntity execution, Map<String, Object> currentValues) {
         List<FormProperty> formProperties = new ArrayList<>();
         for (FormPropertyHandler formPropertyHandler : formPropertyHandlers) {
-            if (formPropertyHandler.isReadable()) {
+            if (formPropertyHandler.isReadable() && formPropertyHandler.isVisible(execution, currentValues)) {
                 FormProperty formProperty = formPropertyHandler.createFormProperty(execution);
                 formProperties.add(formProperty);
             }
         }
         formData.setFormProperties(formProperties);
+    }
+
+    @Override
+    public List<String> getFormFieldListeners()
+    {
+        List<String> fieldListeners = new ArrayList<>();
+        Pattern variablePattern = Pattern.compile("\\bcurrentValues(?:\\[[\"'](.+?)[\"']\\]|\\.(.+?)\\b)");
+        for (FormPropertyHandler formPropertyHandler : formPropertyHandlers)
+        {
+            Expression propertyVisibilityExpression = formPropertyHandler.getVisibilityExpression();
+            if (propertyVisibilityExpression != null)
+            {
+                String visibilityExpression = propertyVisibilityExpression.getExpressionText();
+                Matcher matcher = variablePattern.matcher(visibilityExpression);
+                while (matcher.find())
+                {
+                    String varOne = matcher.group(1);
+                    String varTwo = matcher.group(2);
+                    if (varOne != null && !varOne.isEmpty())
+                        fieldListeners.add(varOne);
+                    if (varTwo != null && !varTwo.isEmpty())
+                        fieldListeners.add(varTwo);
+                }
+            }
+        }
+        return fieldListeners;
     }
 
     @Override

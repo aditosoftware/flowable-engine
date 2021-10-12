@@ -17,6 +17,8 @@ import org.flowable.common.engine.api.delegate.Expression;
 import org.flowable.engine.form.TaskFormData;
 import org.flowable.task.service.impl.persistence.entity.TaskEntity;
 
+import java.util.Map;
+
 /**
  * @author Tom Baeyens
  * @author Joram Barrez
@@ -24,6 +26,8 @@ import org.flowable.task.service.impl.persistence.entity.TaskEntity;
 public interface TaskFormHandler extends FormHandler {
 
     TaskFormData createTaskForm(TaskEntity task);
+
+    TaskFormData createTaskForm(TaskEntity task, Map<String, Object> currentValues);
 
     Expression getFormKey();
 }

@@ -13,6 +13,7 @@
 
 package org.flowable.engine.impl;
 
+import java.util.List;
 import java.util.Map;
 
 import org.flowable.common.engine.impl.service.CommonEngineServiceImpl;
@@ -20,13 +21,7 @@ import org.flowable.engine.FormService;
 import org.flowable.engine.form.StartFormData;
 import org.flowable.engine.form.TaskFormData;
 import org.flowable.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.flowable.engine.impl.cmd.GetFormKeyCmd;
-import org.flowable.engine.impl.cmd.GetRenderedStartFormCmd;
-import org.flowable.engine.impl.cmd.GetRenderedTaskFormCmd;
-import org.flowable.engine.impl.cmd.GetStartFormCmd;
-import org.flowable.engine.impl.cmd.GetTaskFormCmd;
-import org.flowable.engine.impl.cmd.SubmitStartFormCmd;
-import org.flowable.engine.impl.cmd.SubmitTaskFormCmd;
+import org.flowable.engine.impl.cmd.*;
 import org.flowable.engine.runtime.ProcessInstance;
 
 /**
@@ -63,6 +58,16 @@ public class FormServiceImpl extends CommonEngineServiceImpl<ProcessEngineConfig
     @Override
     public TaskFormData getTaskFormData(String taskId) {
         return commandExecutor.execute(new GetTaskFormCmd(taskId));
+    }
+
+    @Override
+    public TaskFormData getTaskFormData(String taskId, Map<String, Object> currentValues) {
+        return commandExecutor.execute(new GetTaskFormCmd(taskId, currentValues));
+    }
+
+    @Override
+    public List<String> getTaskFormFieldListeners(String taskId) {
+        return commandExecutor.execute(new GetTaskFormFieldListenerCmd(taskId));
     }
 
     @Override

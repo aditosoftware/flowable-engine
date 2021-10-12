@@ -4,6 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <name>Flowable - BPMN Model</name>
+  <groupId>de.adito.aditoweb</groupId>
   <artifactId>flowable-bpmn-model</artifactId>
 
   <parent>
@@ -12,6 +13,20 @@
     <relativePath>../..</relativePath>
     <version>6.5.0.27</version>
   </parent>
+
+  <distributionManagement>
+    <repository>
+      <id>adito.m2</id>
+      <name>releases</name>
+      <url>${repository.releases}</url>
+    </repository>
+    <snapshotRepository>
+      <id>adito.m2</id>
+      <name>snapshots</name>
+      <url>${repository.snapshots}</url>
+      <uniqueVersion>false</uniqueVersion>
+    </snapshotRepository>
+  </distributionManagement>
   
   <properties>
     <flowable.artifact>

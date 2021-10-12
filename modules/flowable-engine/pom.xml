@@ -4,6 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <name>Flowable - Engine</name>
+    <groupId>de.adito.aditoweb</groupId>
     <artifactId>flowable-engine</artifactId>
 
     <parent>
@@ -13,10 +14,25 @@
         <version>6.5.0.27</version>
     </parent>
 
+    <distributionManagement>
+        <repository>
+            <id>adito.m2</id>
+            <name>releases</name>
+            <url>${repository.releases}</url>
+        </repository>
+        <snapshotRepository>
+            <id>adito.m2</id>
+            <name>snapshots</name>
+            <url>${repository.snapshots}</url>
+            <uniqueVersion>false</uniqueVersion>
+        </snapshotRepository>
+    </distributionManagement>
+
     <dependencies>
         <dependency>
-            <groupId>org.flowable</groupId>
+            <groupId>de.adito.aditoweb</groupId>
             <artifactId>flowable-bpmn-converter</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.flowable</groupId>

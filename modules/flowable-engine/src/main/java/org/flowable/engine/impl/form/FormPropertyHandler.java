@@ -14,10 +14,13 @@
 package org.flowable.engine.impl.form;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.flowable.common.engine.api.FlowableException;
 import org.flowable.common.engine.api.delegate.Expression;
+import org.flowable.common.engine.api.variable.VariableContainer;
+import org.flowable.common.engine.impl.el.VariableContainerWrapper;
 import org.flowable.engine.form.AbstractFormType;
 import org.flowable.engine.form.FormProperty;
 import org.flowable.engine.impl.persistence.entity.ExecutionEntity;
@@ -39,6 +42,33 @@ public class FormPropertyHandler implements Serializable {
     protected String variableName;
     protected Expression variableExpression;
     protected Expression defaultExpression;
+    protected Expression visibilityExpression;
+
+    public boolean isVisible (ExecutionEntity execution, Map<String, Object> currentValues)
+    {
+        if (visibilityExpression == null || visibilityExpression.getExpressionText().isEmpty())
+            return true;
+
+        if (currentValues == null)
+            currentValues = new HashMap<>();
+
+        Map<String, Object> variables = execution.getVariables();
+        variables.put("currentValues", currentValues);
+        VariableContainer variablesWrapper = new VariableContainerWrapper(variables);
+        Object visibility = visibilityExpression.getValue(variablesWrapper);
+        if (visibility == null)
+            return false;
+        if (visibility.getClass() == String.class)
+            return !((String) visibility).isEmpty();
+        try
+        {
+            return (Boolean) visibility;
+        }
+        catch (Exception exception)
+        {
+            return false;
+        }
+    }
 
     public FormProperty createFormProperty(ExecutionEntity execution) {
         FormPropertyImpl formProperty = new FormPropertyImpl(this);
@@ -187,5 +217,13 @@ public class FormPropertyHandler implements Serializable {
 
     public void setWritable(boolean isWritable) {
         this.isWritable = isWritable;
+    }
+
+    public Expression getVisibilityExpression() {
+        return visibilityExpression;
+    }
+
+    public void setVisibilityExpression(Expression visibilityExpression) {
+        this.visibilityExpression = visibilityExpression;
     }
 }
