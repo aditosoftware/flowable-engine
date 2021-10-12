@@ -98,6 +98,7 @@
         
         	<div class="pull-right">
             	<button type="button" class="btn" ng-click="close()" ng-disabled="status.loading" translate>ACTION.CANCEL</button>
+            	<button class="btn btn-primary" ng-click="saveAndDeploy()" ng-disabled="status.loading || saveDialog.name.length == 0 || saveDialog.key.length == 0" ng-show="!error && !error.isConflict" translate>ACTION.SAVE-AND-DEPLOY</button>
             	<button class="btn btn-primary" ng-click="saveAndClose()" ng-disabled="status.loading || saveDialog.name.length == 0 || saveDialog.key.length == 0" ng-show="!error && !error.isConflict" translate>ACTION.SAVE-AND-CLOSE</button>
             	<button class="btn btn-primary" ng-click="save()" ng-disabled="status.loading || saveDialog.name.length == 0 || saveDialog.key.length == 0" ng-show="!error && !error.isConflict" translate>ACTION.SAVE</button>
                 <button class="btn btn-primary" ng-click="okClicked()" ng-disabled="isOkButtonDisabled()" ng-show="error && error.isConflict" translate>ACTION.OK</button>

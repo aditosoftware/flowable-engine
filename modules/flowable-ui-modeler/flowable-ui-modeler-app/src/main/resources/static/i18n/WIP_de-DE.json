@@ -1987,7 +1987,8 @@
          "EDIT-CONFIRM":"Speichern",
          "DELETE-CONFIRM":"Prozessmodell lÃ¶schen",
          "USE-AS-NEW-VERSION":"Als neue Version verwenden",
-         "FAVORITE":"Favorit dieses Modell"
+         "FAVORITE":"Favorit dieses Modell",
+         "DEPLOY" : "Modell deployen"
       },
       "DETAILS":{
          "HISTORY-TITLE":"Verlauf",
@@ -2027,10 +2028,12 @@
          }
       },
       "ALERT":{
-         "EDIT-CONFIRM":"Modell aktualisiert"
+         "EDIT-CONFIRM":"Modell aktualisiert",
+         "DEPLOY-CONFIRM": "Modell deployt"
       },
       "ERROR":{
-         "NOT-FOUND":"Das angeforderte Modell existiert nicht"
+         "NOT-FOUND":"Das angeforderte Modell existiert nicht",
+         "DEPLOY-FAILURE": "Modell konnte nicht deployt werden"
       }
    },
    "SUBPROCESS":{
@@ -2450,6 +2453,7 @@
    "ACTION.OK":"Ok",
    "ACTION.SAVE":"Speichern",
    "ACTION.SAVE-AND-CLOSE":"Editor speichern und schlieÃŸen",
+   "ACTION.SAVE-AND-DEPLOY" : "Speichern und deployen",
    "ACTION.SEND":"Senden",
    "ACTION.CANCEL":"Abbrechen",
    "ACTION.SELECT":"AuswÃ¤hlen",

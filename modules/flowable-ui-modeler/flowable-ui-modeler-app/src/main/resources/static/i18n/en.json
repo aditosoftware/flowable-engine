@@ -2025,7 +2025,8 @@
             "EDIT-CONFIRM": "Save",
             "DELETE-CONFIRM": "Delete process model",
             "USE-AS-NEW-VERSION": "Use as new version",
-            "FAVORITE": "Favorite this model"
+            "FAVORITE": "Favorite this model",
+            "DEPLOY" : "Deploy this model"
 
         },
         "DETAILS": {
@@ -2067,10 +2068,12 @@
           }
         },
         "ALERT": {
-          "EDIT-CONFIRM": "Model updated"
+          "EDIT-CONFIRM": "Model updated",
+          "DEPLOY-CONFIRM": "Model deployed"
         },
         "ERROR": {
-          "NOT-FOUND": "The requested model does not exist"
+          "NOT-FOUND": "The requested model does not exist",
+          "DEPLOY-FAILURE": "Model could not be deployed"
         }
     },
 
@@ -2506,6 +2509,7 @@
     "ACTION.OK" : "Ok",
     "ACTION.SAVE" : "Save",
     "ACTION.SAVE-AND-CLOSE" : "Save and close editor",
+    "ACTION.SAVE-AND-DEPLOY" : "Save and deploy",
     "ACTION.SEND" : "Send",
     "ACTION.CANCEL" : "Cancel",
     "ACTION.SELECT" : "Select",

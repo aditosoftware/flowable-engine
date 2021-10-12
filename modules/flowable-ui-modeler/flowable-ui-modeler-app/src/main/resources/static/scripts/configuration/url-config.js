@@ -248,8 +248,16 @@ FLOWABLE.APP_URL = {
         return FLOWABLE.CONFIG.contextRoot + '/app/rest/jditoprocesses';
     },
 
-     getTaskVariablesUrl: function () {
-         return FLOWABLE.CONFIG.contextRoot + '/app/rest/taskvariables';
+    getTaskVariablesUrl: function () {
+        return FLOWABLE.CONFIG.contextRoot + '/app/rest/taskvariables';
+    },
+
+    getProcessDeployUrl: function (pModelId) {
+        return FLOWABLE.CONFIG.contextRoot + '/app/rest/process-deploy/' + pModelId;
+    },
+
+     getAditoProcessDefinitionUrl: function () {
+         return FLOWABLE.CONFIG.contextRoot + '/app/rest/adito-process-definition-url';
      }
 
 };
