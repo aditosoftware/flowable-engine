@@ -242,6 +242,10 @@ FLOWABLE.APP_URL = {
 
     getAboutInfoUrl: function () {
         return FLOWABLE.CONFIG.contextRoot + '/app/rest/about-info';
+    },
+
+    getJditoProcessesUrl: function () {
+        return FLOWABLE.CONFIG.contextRoot + '/app/rest/jditoprocesses';
     }
 
 };

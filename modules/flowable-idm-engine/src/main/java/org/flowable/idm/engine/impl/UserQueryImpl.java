@@ -13,23 +13,39 @@
 
 package org.flowable.idm.engine.impl;
 
-import java.util.List;
-
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import io.netty.handler.ssl.SslContext;
+import io.netty.handler.ssl.SslContextBuilder;
+import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import org.flowable.common.engine.api.FlowableIllegalArgumentException;
-import org.flowable.common.engine.api.query.CacheAwareQuery;
+import org.flowable.common.engine.api.query.QueryCacheValues;
 import org.flowable.common.engine.impl.interceptor.CommandContext;
 import org.flowable.common.engine.impl.interceptor.CommandExecutor;
 import org.flowable.common.engine.impl.query.AbstractQuery;
 import org.flowable.idm.api.User;
 import org.flowable.idm.api.UserQuery;
 import org.flowable.idm.api.UserQueryProperty;
-import org.flowable.idm.engine.impl.persistence.entity.UserEntity;
+import org.flowable.idm.engine.impl.persistence.entity.UserEntityImpl;
 import org.flowable.idm.engine.impl.util.CommandContextUtil;
+import org.flowable.idm.engine.impl.ws.UserWrapper;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.client.reactive.ClientHttpConnector;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.netty.http.client.HttpClient;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Joram Barrez
  */
-public class UserQueryImpl extends AbstractQuery<UserQuery, User> implements UserQuery, CacheAwareQuery<UserEntity> {
+public class UserQueryImpl extends AbstractQuery<UserQuery, User> implements UserQuery, QueryCacheValues {
 
     private static final long serialVersionUID = 1L;
     protected String id;
@@ -161,7 +177,7 @@ public class UserQueryImpl extends AbstractQuery<UserQuery, User> implements Use
         this.fullNameLikeIgnoreCase = fullNameLikeIgnoreCase.toLowerCase();
         return this;
     }
-    
+
     @Override
     public UserQuery userDisplayName(String displayName) {
         if (displayName == null) {
@@ -259,13 +275,57 @@ public class UserQueryImpl extends AbstractQuery<UserQuery, User> implements Use
     // results //////////////////////////////////////////////////////////
 
     @Override
-    public long executeCount(CommandContext commandContext) {
-        return CommandContextUtil.getUserEntityManager(commandContext).findUserCountByQueryCriteria(this);
+    public long executeCount(CommandContext commandContext)
+    {
+        return executeList(commandContext).size();
     }
 
     @Override
-    public List<User> executeList(CommandContext commandContext) {
-        return CommandContextUtil.getUserEntityManager(commandContext).findUserByQueryCriteria(this);
+    public List<User> executeList(CommandContext commandContext)
+    {
+        List<User> users = new ArrayList<>();
+        try {
+            SslContext sslContext = SslContextBuilder
+                    .forClient()
+                    .trustManager(InsecureTrustManagerFactory.INSTANCE)
+                    .build();
+            HttpClient httpClient = HttpClient.create().secure(t -> t.sslContext(sslContext));
+
+
+            WebClient.Builder clientBuilder = WebClient.builder()
+                    .baseUrl("https://localhost:8443")
+                    .clientConnector(new ReactorClientHttpConnector(httpClient))
+                    .defaultHeaders(headers -> headers.setBasicAuth("flowableIdmService", "HczABCxBEUKSmwQEnT8vbmkE8Bj1hcXOKSbsLWBg"))
+                    .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+
+            Gson gson = new Gson();
+
+            clientBuilder.defaultHeader("Userfilter", gson.toJson(this));
+
+            WebClient.RequestHeadersSpec<?> spec = clientBuilder.build().get()
+                    .uri("/services/rest/workflowUsers_rest");
+            String wsResult = spec.retrieve().bodyToMono(String.class).block();
+
+            UserWrapper[] wsUsers = gson.fromJson(wsResult, UserWrapper[].class);
+            users = Arrays.stream(wsUsers).map(wsUser -> {
+                User user = new UserEntityImpl();
+                user.setEmail(wsUser.getEmail());
+                user.setFirstName(wsUser.getFirstName());
+                user.setLastName(wsUser.getLastName());
+                user.setId(wsUser.getId());
+                user.setDisplayName(wsUser.getFullName());
+                return user;
+            }).collect(Collectors.toList());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        List<User> defaultUsers = CommandContextUtil.getUserEntityManager(commandContext).findUserByQueryCriteria(this);
+
+        users.addAll(defaultUsers);
+
+        return users;
     }
 
     // getters //////////////////////////////////////////////////////////

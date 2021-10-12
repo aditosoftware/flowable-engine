@@ -1,9 +1,9 @@
 /* Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,23 +13,39 @@
 
 package org.flowable.idm.engine.impl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.google.gson.Gson;
+import io.netty.handler.ssl.SslContext;
+import io.netty.handler.ssl.SslContextBuilder;
+import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import org.flowable.common.engine.api.FlowableIllegalArgumentException;
-import org.flowable.common.engine.api.query.CacheAwareQuery;
+import org.flowable.common.engine.api.query.QueryCacheValues;
 import org.flowable.common.engine.impl.interceptor.CommandContext;
 import org.flowable.common.engine.impl.interceptor.CommandExecutor;
 import org.flowable.common.engine.impl.query.AbstractQuery;
 import org.flowable.idm.api.Group;
 import org.flowable.idm.api.GroupQuery;
 import org.flowable.idm.api.GroupQueryProperty;
-import org.flowable.idm.engine.impl.persistence.entity.GroupEntity;
+import org.flowable.idm.api.User;
+import org.flowable.idm.engine.impl.persistence.entity.GroupEntityImpl;
+import org.flowable.idm.engine.impl.persistence.entity.UserEntityImpl;
 import org.flowable.idm.engine.impl.util.CommandContextUtil;
+import org.flowable.idm.engine.impl.ws.GroupWrapper;
+import org.flowable.idm.engine.impl.ws.UserWrapper;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.netty.http.client.HttpClient;
 
 /**
  * @author Joram Barrez
  */
-public class GroupQueryImpl extends AbstractQuery<GroupQuery, Group> implements GroupQuery, CacheAwareQuery<GroupEntity> {
+public class GroupQueryImpl extends AbstractQuery<GroupQuery, Group> implements GroupQuery, QueryCacheValues {
 
     private static final long serialVersionUID = 1L;
     protected String id;
@@ -145,12 +161,56 @@ public class GroupQueryImpl extends AbstractQuery<GroupQuery, Group> implements 
 
     @Override
     public long executeCount(CommandContext commandContext) {
-        return CommandContextUtil.getGroupEntityManager(commandContext).findGroupCountByQueryCriteria(this);
+        return executeList(commandContext).size();
     }
 
     @Override
     public List<Group> executeList(CommandContext commandContext) {
-        return CommandContextUtil.getGroupEntityManager(commandContext).findGroupByQueryCriteria(this);
+        List<Group> groups = new ArrayList<>();
+        try {
+            SslContext sslContext = SslContextBuilder
+                    .forClient()
+                    .trustManager(InsecureTrustManagerFactory.INSTANCE)
+                    .build();
+            HttpClient httpClient = HttpClient.create().secure(t -> t.sslContext(sslContext));
+
+
+            WebClient.Builder clientBuilder = WebClient.builder()
+                    .baseUrl("https://localhost:8443")
+                    .clientConnector(new ReactorClientHttpConnector(httpClient))
+                    .defaultHeaders(headers -> headers.setBasicAuth("flowableIdmService", "HczABCxBEUKSmwQEnT8vbmkE8Bj1hcXOKSbsLWBg"))
+                    .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+
+            Gson gson = new Gson();
+
+            clientBuilder.defaultHeader("Id", id);
+            clientBuilder.defaultHeader("Ids", gson.toJson(ids));
+            clientBuilder.defaultHeader("Name", name);
+            clientBuilder.defaultHeader("Namelike", nameLike);
+            clientBuilder.defaultHeader("Namelikeignorecase", nameLikeIgnoreCase);
+            clientBuilder.defaultHeader("Userid", userId);
+            clientBuilder.defaultHeader("Userids", gson.toJson(userIds));
+            clientBuilder.defaultHeader("Type", type);
+
+            WebClient.RequestHeadersSpec<?> spec = clientBuilder.build().get()
+                    .uri("/services/rest/workflowRoles_rest");
+            String wsResult = spec.retrieve().bodyToMono(String.class).block();
+
+            GroupWrapper[] wsGroups = gson.fromJson(wsResult, GroupWrapper[].class);
+            groups = Arrays.stream(wsGroups).map(wsGroup -> {
+                Group group = new GroupEntityImpl();
+                group.setId(wsGroup.getId());
+                group.setName(wsGroup.getName());
+                group.setType(wsGroup.getType());
+                return group;
+            }).collect(Collectors.toList());
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return groups;
     }
 
     // getters ////////////////////////////////////////////////////////

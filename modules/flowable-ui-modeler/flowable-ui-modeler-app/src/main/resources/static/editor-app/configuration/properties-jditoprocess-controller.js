@@ -11,10 +11,14 @@ angular.module('flowableModeler').controller('FlowableJditoProcessDisplayCtrl', 
     }
 }]);
 
-angular.module('flowableModeler').controller('FlowableJditoProcessPropertyCtrl', [ '$scope', function ($scope) {
+angular.module('flowableModeler').controller('FlowableJditoProcessPropertyCtrl', [ '$scope', 'JditoProcessesService', function ($scope, JditoProcessesService) {
 
-	$scope.shapeId = $scope.selectedShape.id;
-	$scope.valueFlushed = false;
+    var processes = [];
+    JditoProcessesService.getProcesses().then(function (result) {
+        for (let id in result)
+            processes.push({id: id, name: result[id]});
+    });
+    $scope.processes = processes;
 
 	if ($scope.property.value !== undefined && $scope.property.value !== null
         && $scope.property.value.fields !== undefined
@@ -42,33 +46,8 @@ angular.module('flowableModeler').controller('FlowableJditoProcessPropertyCtrl',
 	    }
 	};
 
-    /** Handler called when input field is blurred */
-    $scope.inputBlurred = function() {
-    	$scope.valueFlushed = true;
-    	if ($scope.inputProcess) {
-    		$scope.inputProcess = $scope.inputProcess.replace(/(<([^>]+)>)/ig,"");
-    	}
+    $scope.processChanged = function() {
     	$scope.setProcess();
         $scope.updatePropertyInModel($scope.property);
     };
-
-    $scope.enterPressed = function(keyEvent) {
-        // if enter is pressed
-        if (keyEvent && keyEvent.which === 13) {
-            keyEvent.preventDefault();
-            $scope.inputBlurred(); // we want to do the same as if the user would blur the input field
-        }
-        // else; do nothing
-    };
-
-    $scope.$on('$destroy', function controllerDestroyed() {
-    	if(!$scope.valueFlushed) {
-    		if ($scope.inputProcess) {
-        		$scope.inputProcess = $scope.inputProcess.replace(/(<([^>]+)>)/ig,"");
-        	}
-        	$scope.setProcess();
-    		$scope.updatePropertyInModel($scope.property, $scope.shapeId);
-    	}
-    });
-
 }]);

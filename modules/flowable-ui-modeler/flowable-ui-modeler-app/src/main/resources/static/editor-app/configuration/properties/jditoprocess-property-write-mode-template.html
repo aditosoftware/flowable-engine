@@ -1,8 +1,4 @@
 <div ng-controller="FlowableJditoProcessPropertyCtrl">
-    <input type="text" ng-model="inputProcess"
-           class="form-control"
-           auto-focus
-           select-text="inputProcess"
-           ng-blur="inputBlurred()"
-           ng-keypress="enterPressed($event)"/>
+    <select ng-model="inputProcess" ng-change="processChanged()" ng-options="process.id as process.name for process in processes">
+    </select>
 </div>

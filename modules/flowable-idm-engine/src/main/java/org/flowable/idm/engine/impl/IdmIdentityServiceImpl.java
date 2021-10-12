@@ -77,6 +77,11 @@ public class IdmIdentityServiceImpl extends CommonEngineServiceImpl<IdmEngineCon
         return commandExecutor.execute(new CreateGroupCmd(groupId));
     }
 
+    public IdmIdentityServiceImpl()
+    {
+        super();
+    }
+
     @Override
     public User newUser(String userId) {
         return commandExecutor.execute(new CreateUserCmd(userId));

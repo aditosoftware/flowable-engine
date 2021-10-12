@@ -10,7 +10,7 @@
 	<property name="target.newsite.root" value="target/website" />
 	<property name="flowable.website" value="../../flowable-website" />
 
-	<condition property="mvn.executable" value="mvn.bat" else="mvn">
+	<condition property="mvn.executable" value="mvn.cmd" else="mvn">
 		<os family="windows" />
 	</condition>
 
