@@ -110,7 +110,7 @@ angular.module('flowableModeler').controller('FlowableFieldsPopupCtrl',
         // Click handler for add button
         $scope.addNewField = function () {
             var newField = {
-                name: 'fieldName',
+                name: 'jditoProcess',
                 implementation: '',
                 stringValue: '',
                 expression: '',

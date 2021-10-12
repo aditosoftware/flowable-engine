@@ -1,0 +1,5 @@
+<div ng-controller="FlowableJditoProcessDisplayCtrl">
+    <span ng-if="inputProcess">{{inputProcess|limitTo:20}}</span>
+    <span ng-if="inputProcess != null && inputProcess.length > 20">...</span>
+    <span ng-if="!inputProcess" translate>PROPERTY.EMPTY</span>
+</div>

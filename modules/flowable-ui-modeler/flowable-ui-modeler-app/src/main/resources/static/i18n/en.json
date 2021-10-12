@@ -926,6 +926,12 @@
             "TITLE" : "Cancel remaining instances",
             "DESCRIPTION" : "Cancel the remaining instances for the adhoc sub process?"
           }
+        },
+        "JDITOPROCESSPACKAGE" : {
+          "JDITOPROCESS" : {
+            "TITLE" : "jDito process",
+            "DESCRIPTION" : "The jDito-process that shall be executed"
+          }
         }
 
       },

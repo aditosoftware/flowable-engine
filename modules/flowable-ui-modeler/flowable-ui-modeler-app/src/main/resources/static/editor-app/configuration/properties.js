@@ -181,5 +181,9 @@ FLOWABLE.PROPERTY_CONFIG =
     "flowable-channeltype" : {
         "readModeTemplateUrl": "editor-app/configuration/properties/default-value-display-template.html",
         "writeModeTemplateUrl": "editor-app/configuration/properties/event-channel-type-property-write-template.html"
+    },
+    "flowable-jditoprocess" : {
+        "readModeTemplateUrl": "editor-app/configuration/properties/jditoprocess-property-display-template.html",
+        "writeModeTemplateUrl": "editor-app/configuration/properties/jditoprocess-property-write-mode-template.html"
     }
 };
