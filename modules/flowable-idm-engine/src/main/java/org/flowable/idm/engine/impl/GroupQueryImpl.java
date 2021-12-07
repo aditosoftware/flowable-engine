@@ -25,8 +25,10 @@ import org.flowable.common.engine.impl.query.AbstractQuery;
 import org.flowable.idm.api.Group;
 import org.flowable.idm.api.GroupQuery;
 import org.flowable.idm.api.GroupQueryProperty;
+import org.flowable.idm.api.User;
 import org.flowable.idm.engine.impl.persistence.entity.GroupEntity;
 import org.flowable.idm.engine.impl.persistence.entity.GroupEntityImpl;
+import org.flowable.idm.engine.impl.util.CommandContextUtil;
 import org.flowable.idm.engine.impl.ws.GroupWrapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -212,6 +214,9 @@ public class GroupQueryImpl extends AbstractQuery<GroupQuery, Group> implements 
                 e.printStackTrace();
             }
         }
+
+        List<Group> defaultGroups = CommandContextUtil.getGroupEntityManager(commandContext).findGroupByQueryCriteria(this);
+        groups.addAll(defaultGroups);
 
         return groups;
     }
