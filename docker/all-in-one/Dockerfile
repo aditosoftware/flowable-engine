@@ -1,12 +1,12 @@
-FROM adoptopenjdk/openjdk8:alpine-slim
+FROM adoptopenjdk/openjdk16:jdk-16_36-alpine-slim
 ADD wait-for-something.sh .
 
 RUN apk update && apk add fontconfig ghostscript-fonts && rm -rf /var/cache/apk/*
 
 RUN addgroup tomcat && adduser -s /bin/false -G tomcat -h /opt/tomcat -D tomcat
 
-RUN wget https://downloads.apache.org/tomcat/tomcat-8/v8.5.56/bin/apache-tomcat-8.5.56.tar.gz -O /tmp/tomcat.tar.gz
-RUN cd /tmp && tar xvfz tomcat.tar.gz && cp -Rv /tmp/apache-tomcat-8.5.56/* /opt/tomcat/ && rm -Rf /tmp/apache-tomcat-8.5.56
+RUN wget https://downloads.apache.org/tomcat/tomcat-8/v8.5.73/bin/apache-tomcat-8.5.73.tar.gz -O /tmp/tomcat.tar.gz
+RUN cd /tmp && tar xvfz tomcat.tar.gz && cp -Rv /tmp/apache-tomcat-8.5.73/* /opt/tomcat/ && rm -Rf /tmp/apache-tomcat-8.5.73
 
 COPY assets/flowable-idm.war.original /opt/tomcat/webapps/flowable-idm.war
 COPY assets/flowable-modeler.war.original /opt/tomcat/webapps/flowable-modeler.war

@@ -29,6 +29,26 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
         </dependency>
+		<dependency>
+			<groupId>com.microsoft.sqlserver</groupId>
+			<artifactId>mssql-jdbc</artifactId>
+			<version>9.2.1.jre11</version>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle.ojdbc</groupId>
+			<artifactId>ojdbc10</artifactId>
+			<version>19.3.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mariadb.jdbc</groupId>
+			<artifactId>mariadb-java-client</artifactId>
+			<version>2.7.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>42.2.18</version>
+		</dependency>
     </dependencies>
     <groupId>org.flowable</groupId>
 	<artifactId>flowable-root</artifactId>
@@ -679,11 +699,6 @@
 			<dependency>
 				<groupId>org.flowable</groupId>
 				<artifactId>flowable-camel</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.flowable</groupId>
-				<artifactId>flowable-mule</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -1663,7 +1678,6 @@
 				<module>modules/flowable-cxf</module>
 				<module>modules/flowable-osgi</module>
 				<module>modules/flowable-camel</module>
-				<module>modules/flowable-mule</module>
 				<module>modules/flowable-http</module>
 				<module>modules/flowable-cdi</module>
 				<module>modules/flowable-camel-cdi</module>
@@ -1674,6 +1688,10 @@
 				<module>modules/flowable-crystalball</module>
 				<module>modules/flowable-ui-common</module>
 				<module>modules/flowable-ui-edge</module>
+				<module>modules/flowable-ui-idm</module>
+				<module>modules/flowable-ui-modeler</module>
+				<module>modules/flowable-ui-admin</module>
+				<module>modules/flowable-ui-task</module>
 				<module>tooling/archetypes/flowable-archetype-unittest</module>
 			</modules>
 			<build>
