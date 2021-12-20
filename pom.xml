@@ -1165,7 +1165,6 @@
 		<module>modules/flowable-app-engine-api</module>
 		<module>modules/flowable-app-engine</module>
 		<module>modules/flowable-spring-security</module>
-        <module>modules/adito-idm</module>
         <module>modules/adito-data-service</module>
     </modules>
 
