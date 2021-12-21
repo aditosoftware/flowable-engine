@@ -140,11 +140,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <excludeArtifactIds>
-                        spring-boot-configuration-processor
-                    </excludeArtifactIds>
-                </configuration>
             </plugin>
 
             <plugin>
