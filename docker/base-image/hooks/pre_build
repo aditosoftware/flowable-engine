@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd ..
+
 BASE_PWD="$PWD"
 FLOWABLE_VERSION=6.5.0
 
