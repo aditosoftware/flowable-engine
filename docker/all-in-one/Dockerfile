@@ -8,6 +8,8 @@ RUN addgroup tomcat && adduser -s /bin/false -G tomcat -h /opt/tomcat -D tomcat
 RUN wget https://downloads.apache.org/tomcat/tomcat-8/v8.5.73/bin/apache-tomcat-8.5.73.tar.gz -O /tmp/tomcat.tar.gz
 RUN cd /tmp && tar xvfz tomcat.tar.gz && cp -Rv /tmp/apache-tomcat-8.5.73/* /opt/tomcat/ && rm -Rf /tmp/apache-tomcat-8.5.73
 
+COPY context.xml /opt/tomcat/conf/context.xml
+
 COPY assets/flowable-idm.war.original /opt/tomcat/webapps/flowable-idm.war
 COPY assets/flowable-modeler.war.original /opt/tomcat/webapps/flowable-modeler.war
 
