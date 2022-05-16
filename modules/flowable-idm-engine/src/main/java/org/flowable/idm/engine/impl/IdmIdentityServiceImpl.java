@@ -14,6 +14,7 @@ package org.flowable.idm.engine.impl;
 
 import java.util.List;
 
+import org.flowable.aditoDataService.AditoUserService;
 import org.flowable.common.engine.impl.identity.Authentication;
 import org.flowable.common.engine.impl.service.CommonEngineServiceImpl;
 import org.flowable.idm.api.Group;
@@ -108,8 +109,8 @@ public class IdmIdentityServiceImpl extends CommonEngineServiceImpl<IdmEngineCon
     }
 
     @Override
-    public UserQuery createUserQuery(String aditoUrl) {
-        return commandExecutor.execute(new CreateUserQueryCmd(aditoUrl));
+    public UserQuery createUserQuery(AditoUserService aditoUserService) {
+        return commandExecutor.execute(new CreateUserQueryCmd(aditoUserService));
     }
 
     @Override
@@ -123,8 +124,8 @@ public class IdmIdentityServiceImpl extends CommonEngineServiceImpl<IdmEngineCon
     }
 
     @Override
-    public GroupQuery createGroupQuery(String aditoUrl) {
-        return commandExecutor.execute(new CreateGroupQueryCmd(aditoUrl));
+    public GroupQuery createGroupQuery(AditoUserService aditoUserService) {
+        return commandExecutor.execute(new CreateGroupQueryCmd(aditoUserService));
     }
 
     @Override

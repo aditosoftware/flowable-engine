@@ -14,11 +14,8 @@
 package org.flowable.idm.engine.impl;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import io.netty.handler.ssl.SslContext;
-import io.netty.handler.ssl.SslContextBuilder;
-import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
+import org.flowable.aditoDataService.AditoUserService;
+import org.flowable.aditoDataService.model.UserModel;
 import org.flowable.common.engine.api.FlowableIllegalArgumentException;
 import org.flowable.common.engine.api.query.CacheAwareQuery;
 import org.flowable.common.engine.impl.interceptor.CommandContext;
@@ -30,17 +27,8 @@ import org.flowable.idm.api.UserQueryProperty;
 import org.flowable.idm.engine.impl.persistence.entity.UserEntity;
 import org.flowable.idm.engine.impl.persistence.entity.UserEntityImpl;
 import org.flowable.idm.engine.impl.util.CommandContextUtil;
-import org.flowable.idm.engine.impl.ws.UserWrapper;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.client.reactive.ClientHttpConnector;
-import org.springframework.http.client.reactive.ReactorClientHttpConnector;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.netty.http.client.HttpClient;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -69,7 +57,7 @@ public class UserQueryImpl extends AbstractQuery<UserQuery, User> implements Use
     protected List<String> groupIds;
     protected String tenantId;
 
-    private String aditoUrl;
+    private transient AditoUserService aditoUserService;
 
     public UserQueryImpl() {
     }
@@ -78,9 +66,9 @@ public class UserQueryImpl extends AbstractQuery<UserQuery, User> implements Use
         super(commandContext);
     }
 
-    public UserQueryImpl(CommandExecutor commandExecutor, String aditoUrl) {
+    public UserQueryImpl(CommandExecutor commandExecutor, AditoUserService aditoUserService) {
         super(commandExecutor);
-        this.aditoUrl = aditoUrl;
+        this.aditoUserService = aditoUserService;
     }
 
     @Override
@@ -288,31 +276,35 @@ public class UserQueryImpl extends AbstractQuery<UserQuery, User> implements Use
     public List<User> executeList(CommandContext commandContext)
     {
         List<User> users = new ArrayList<>();
-        if (aditoUrl != null && !aditoUrl.isEmpty()) {
+        if (this.aditoUserService != null)
+        {
             try {
-                SslContext sslContext = SslContextBuilder
-                        .forClient()
-                        .trustManager(InsecureTrustManagerFactory.INSTANCE)
-                        .build();
-                HttpClient httpClient = HttpClient.create().secure(t -> t.sslContext(sslContext));
+                Map<String,List<String>> params = new LinkedHashMap<>();
+                _putIfSet(params, "id", this.id);
+                _putIfSet(params, "idIgnoreCase", this.idIgnoreCase);
+                _putIfSet(params, "lastName", this.lastName);
+                _putIfSet(params, "lastNameLike", this.lastNameLike);
+                _putIfSet(params, "lastNameLikeIgnoreCase", this.lastNameLikeIgnoreCase);
+                _putIfSet(params, "firstName", this.firstName);
+                _putIfSet(params, "firstNameLike", this.firstNameLike);
+                _putIfSet(params, "firstNameLikeIgnoreCase", this.firstNameLikeIgnoreCase);
+                _putIfSet(params, "displayName", this.displayName);
+                _putIfSet(params, "displayNameLike", this.displayNameLike);
+                _putIfSet(params, "displayNameLikeIgnoreCase", this.displayNameLikeIgnoreCase);
+                _putIfSet(params, "fullNameLike", this.fullNameLike);
+                _putIfSet(params, "fullNameLikeIgnoreCase", this.fullNameLikeIgnoreCase);
+                _putIfSet(params, "email", this.email);
+                _putIfSet(params, "emailLike", this.emailLike);
+                _putIfSet(params, "groupId", this.groupId);
+                if (this.ids != null && this.ids.size() > 0)
+                    params.put("ids", this.ids);
+                if (this.groupIds != null && this.groupIds.size() > 0)
+                    params.put("groupIds", this.groupIds);
 
-
-                WebClient.Builder clientBuilder = WebClient.builder()
-                        .baseUrl(aditoUrl)
-                        .clientConnector(new ReactorClientHttpConnector(httpClient))
-                        .defaultHeaders(headers -> headers.setBasicAuth("flowableIdmService", "HczABCxBEUKSmwQEnT8vbmkE8Bj1hcXOKSbsLWBg"))
-                        .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-
-                Gson gson = new Gson();
-
-                clientBuilder.defaultHeader("Userfilter", gson.toJson(this));
-
-                WebClient.RequestHeadersSpec<?> spec = clientBuilder.build().get()
-                        .uri("/services/rest/workflowUsers_rest");
-                String wsResult = spec.retrieve().bodyToMono(String.class).block();
-
-                UserWrapper[] wsUsers = gson.fromJson(wsResult, UserWrapper[].class);
-                users = Arrays.stream(wsUsers).map(wsUser -> {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Userfilter", new Gson().toJson(this));
+                List<UserModel> userModels = aditoUserService.getUsers(params, headers);
+                users = userModels.stream().map(wsUser -> {
                     User user = new UserEntityImpl();
                     user.setEmail(wsUser.getEmail());
                     user.setFirstName(wsUser.getFirstName());
@@ -321,17 +313,21 @@ public class UserQueryImpl extends AbstractQuery<UserQuery, User> implements Use
                     user.setDisplayName(wsUser.getFullName());
                     return user;
                 }).collect(Collectors.toList());
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-
         List<User> defaultUsers = CommandContextUtil.getUserEntityManager(commandContext).findUserByQueryCriteria(this);
 
         users.addAll(defaultUsers);
 
         return users;
+    }
+
+    private void _putIfSet (Map<String,List<String>> params, String name, String val)
+    {
+        if (val != null && !val.isEmpty())
+            params.put(name, Collections.singletonList(val));
     }
 
     // getters //////////////////////////////////////////////////////////

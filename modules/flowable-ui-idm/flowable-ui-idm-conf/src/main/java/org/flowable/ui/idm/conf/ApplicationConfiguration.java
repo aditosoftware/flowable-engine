@@ -32,7 +32,8 @@ import org.springframework.web.servlet.DispatcherServlet;
     "org.flowable.ui.idm.conf",
     "org.flowable.ui.idm.security",
     "org.flowable.ui.idm.idm",
-    "org.flowable.ui.idm.service"}, excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = RemoteIdmServiceImpl.class)})
+    "org.flowable.ui.idm.service",
+    "org.flowable.aditoDataService"}, excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = RemoteIdmServiceImpl.class)})
 public class ApplicationConfiguration {
 
     @Bean

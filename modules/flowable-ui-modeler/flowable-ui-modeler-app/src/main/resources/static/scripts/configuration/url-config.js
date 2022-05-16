@@ -256,8 +256,11 @@ FLOWABLE.APP_URL = {
         return FLOWABLE.CONFIG.contextRoot + '/app/rest/process-deploy/' + pModelId;
     },
 
-     getAditoProcessDefinitionUrl: function () {
-         return FLOWABLE.CONFIG.contextRoot + '/app/rest/adito-process-definition-url';
-     }
+    getAditoProcessDefinitionUrl: function () {
+        return FLOWABLE.CONFIG.contextRoot + '/app/rest/adito-process-definition-url';
+    },
 
+    getConsumersUrl: function () {
+        return FLOWABLE.CONFIG.contextRoot + '/app/rest/consumers';
+    }
 };

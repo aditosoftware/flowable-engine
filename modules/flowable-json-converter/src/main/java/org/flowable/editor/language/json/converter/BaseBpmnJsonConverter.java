@@ -17,46 +17,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.flowable.bpmn.model.Activity;
-import org.flowable.bpmn.model.Artifact;
-import org.flowable.bpmn.model.Association;
-import org.flowable.bpmn.model.BaseElement;
-import org.flowable.bpmn.model.BoundaryEvent;
-import org.flowable.bpmn.model.BpmnModel;
-import org.flowable.bpmn.model.CompensateEventDefinition;
-import org.flowable.bpmn.model.ConditionalEventDefinition;
-import org.flowable.bpmn.model.DataAssociation;
-import org.flowable.bpmn.model.DataStoreReference;
-import org.flowable.bpmn.model.ErrorEventDefinition;
-import org.flowable.bpmn.model.EscalationEventDefinition;
-import org.flowable.bpmn.model.Event;
-import org.flowable.bpmn.model.EventDefinition;
-import org.flowable.bpmn.model.ExtensionAttribute;
-import org.flowable.bpmn.model.ExtensionElement;
-import org.flowable.bpmn.model.FieldExtension;
-import org.flowable.bpmn.model.FlowElement;
-import org.flowable.bpmn.model.FlowElementsContainer;
-import org.flowable.bpmn.model.FlowNode;
-import org.flowable.bpmn.model.FormProperty;
-import org.flowable.bpmn.model.FormValue;
-import org.flowable.bpmn.model.Gateway;
-import org.flowable.bpmn.model.GraphicInfo;
-import org.flowable.bpmn.model.IOParameter;
-import org.flowable.bpmn.model.Lane;
-import org.flowable.bpmn.model.MapExceptionEntry;
-import org.flowable.bpmn.model.MessageEventDefinition;
-import org.flowable.bpmn.model.MessageFlow;
-import org.flowable.bpmn.model.MultiInstanceLoopCharacteristics;
+import org.flowable.bpmn.model.*;
 import org.flowable.bpmn.model.Process;
-import org.flowable.bpmn.model.SendEventServiceTask;
-import org.flowable.bpmn.model.SequenceFlow;
-import org.flowable.bpmn.model.ServiceTask;
-import org.flowable.bpmn.model.SignalEventDefinition;
-import org.flowable.bpmn.model.StartEvent;
-import org.flowable.bpmn.model.SubProcess;
-import org.flowable.bpmn.model.TerminateEventDefinition;
-import org.flowable.bpmn.model.TimerEventDefinition;
-import org.flowable.bpmn.model.UserTask;
 import org.flowable.editor.constants.EditorJsonConstants;
 import org.flowable.editor.constants.StencilConstants;
 import org.flowable.editor.language.json.converter.util.CollectionUtils;
@@ -459,6 +421,9 @@ public abstract class BaseBpmnJsonConverter implements EditorJsonConstants, Sten
             if (StringUtils.isNotEmpty(property.getDatePattern())) {
                 propertyItemNode.put(PROPERTY_FORM_DATE_PATTERN, property.getDatePattern());
             }
+            if (StringUtils.isNotEmpty(property.getConsumerName())) {
+                propertyItemNode.put(PROPERTY_FORM_CONSUMER_NAME, property.getConsumerName());
+            }
             if (CollectionUtils.isNotEmpty(property.getFormValues())) {
                 ArrayNode valuesNode = objectMapper.createArrayNode();
                 for (FormValue formValue : property.getFormValues()) {
@@ -734,6 +699,8 @@ public abstract class BaseBpmnJsonConverter implements EditorJsonConstants, Sten
                                 }
                                 formProperty.setFormValues(formValueList);
                             }
+                        } else if ("lookup".equalsIgnoreCase(formProperty.getType())) {
+                            formProperty.setConsumerName(getValueAsString(PROPERTY_FORM_CONSUMER_NAME, formNode));
                         }
 
                         formProperty.setRequired(getValueAsBoolean(PROPERTY_FORM_REQUIRED, formNode));

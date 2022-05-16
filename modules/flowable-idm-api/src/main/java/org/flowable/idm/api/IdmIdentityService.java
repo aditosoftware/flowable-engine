@@ -14,6 +14,7 @@ package org.flowable.idm.api;
 
 import java.util.List;
 
+import org.flowable.aditoDataService.AditoUserService;
 import org.flowable.common.engine.api.FlowableIllegalArgumentException;
 
 /**
@@ -58,7 +59,7 @@ public interface IdmIdentityService {
      */
     UserQuery createUserQuery();
 
-    UserQuery createUserQuery(String aditoUrl);
+    UserQuery createUserQuery(AditoUserService aditoUserService);
 
     /**
      * Returns a new {@link org.flowable.common.engine.api.query.NativeQuery} for tasks.
@@ -84,7 +85,7 @@ public interface IdmIdentityService {
      */
     GroupQuery createGroupQuery();
 
-    GroupQuery createGroupQuery(String aditoUrl);
+    GroupQuery createGroupQuery(AditoUserService aditoUserService);
 
     /**
      * Returns a new {@link org.flowable.common.engine.api.query.NativeQuery} for tasks.

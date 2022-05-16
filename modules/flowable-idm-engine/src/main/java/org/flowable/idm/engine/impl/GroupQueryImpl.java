@@ -14,9 +14,8 @@
 package org.flowable.idm.engine.impl;
 
 import com.google.gson.Gson;
-import io.netty.handler.ssl.SslContext;
-import io.netty.handler.ssl.SslContextBuilder;
-import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
+import org.flowable.aditoDataService.AditoUserService;
+import org.flowable.aditoDataService.model.UserGroupModel;
 import org.flowable.common.engine.api.FlowableIllegalArgumentException;
 import org.flowable.common.engine.api.query.CacheAwareQuery;
 import org.flowable.common.engine.impl.interceptor.CommandContext;
@@ -25,20 +24,11 @@ import org.flowable.common.engine.impl.query.AbstractQuery;
 import org.flowable.idm.api.Group;
 import org.flowable.idm.api.GroupQuery;
 import org.flowable.idm.api.GroupQueryProperty;
-import org.flowable.idm.api.User;
 import org.flowable.idm.engine.impl.persistence.entity.GroupEntity;
 import org.flowable.idm.engine.impl.persistence.entity.GroupEntityImpl;
 import org.flowable.idm.engine.impl.util.CommandContextUtil;
-import org.flowable.idm.engine.impl.ws.GroupWrapper;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.client.reactive.ReactorClientHttpConnector;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.netty.http.client.HttpClient;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -56,7 +46,7 @@ public class GroupQueryImpl extends AbstractQuery<GroupQuery, Group> implements 
     protected String userId;
     protected List<String> userIds;
 
-    private String aditoUrl;
+    private AditoUserService aditoUserService;
 
     public GroupQueryImpl() {
     }
@@ -65,9 +55,9 @@ public class GroupQueryImpl extends AbstractQuery<GroupQuery, Group> implements 
         super(commandContext);
     }
 
-    public GroupQueryImpl(CommandExecutor commandExecutor, String aditoUrl) {
+    public GroupQueryImpl(CommandExecutor commandExecutor, AditoUserService aditoUserService) {
         super(commandExecutor);
-        this.aditoUrl = aditoUrl;
+        this.aditoUserService = aditoUserService;
     }
 
     @Override
@@ -170,46 +160,41 @@ public class GroupQueryImpl extends AbstractQuery<GroupQuery, Group> implements 
     public List<Group> executeList(CommandContext commandContext) {
         List<Group> groups = new ArrayList<>();
 
-        if (aditoUrl != null && !aditoUrl.isEmpty()) {
+        if (this.aditoUserService != null)
+        {
             try {
-                SslContext sslContext = SslContextBuilder
-                        .forClient()
-                        .trustManager(InsecureTrustManagerFactory.INSTANCE)
-                        .build();
-                HttpClient httpClient = HttpClient.create().secure(t -> t.sslContext(sslContext));
+                Map<String,List<String>> params = new LinkedHashMap<>();
 
-
-                WebClient.Builder clientBuilder = WebClient.builder()
-                        .baseUrl(aditoUrl)
-                        .clientConnector(new ReactorClientHttpConnector(httpClient))
-                        .defaultHeaders(headers -> headers.setBasicAuth("flowableIdmService", "HczABCxBEUKSmwQEnT8vbmkE8Bj1hcXOKSbsLWBg"))
-                        .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+                _putIfSet(params, "id", this.id);
+                _putIfSet(params, "name", this.name);
+                _putIfSet(params, "nameLike", this.nameLike);
+                _putIfSet(params, "nameLikeIgnoreCase", this.nameLikeIgnoreCase);
+                _putIfSet(params, "userId", this.userId);
+                _putIfSet(params, "type", this.type);
+                if (this.ids != null && this.ids.size() > 0)
+                    params.put("ids", this.ids);
+                if (this.userIds != null && this.userIds.size() > 0)
+                    params.put("userIds", this.userIds);
 
                 Gson gson = new Gson();
+                Map<String,String> headers = new HashMap<>();
+                headers.put("Id", id);
+                headers.put("Ids", gson.toJson(ids));
+                headers.put("Name", name);
+                headers.put("Namelike", nameLike);
+                headers.put("Namelikeignorecase", nameLikeIgnoreCase);
+                headers.put("Userid", userId);
+                headers.put("Userids", gson.toJson(userIds));
+                headers.put("Type", type);
+                List<UserGroupModel> groupModels = aditoUserService.getGroups(params, headers);
 
-                clientBuilder.defaultHeader("Id", id);
-                clientBuilder.defaultHeader("Ids", gson.toJson(ids));
-                clientBuilder.defaultHeader("Name", name);
-                clientBuilder.defaultHeader("Namelike", nameLike);
-                clientBuilder.defaultHeader("Namelikeignorecase", nameLikeIgnoreCase);
-                clientBuilder.defaultHeader("Userid", userId);
-                clientBuilder.defaultHeader("Userids", gson.toJson(userIds));
-                clientBuilder.defaultHeader("Type", type);
-
-                WebClient.RequestHeadersSpec<?> spec = clientBuilder.build().get()
-                        .uri("/services/rest/workflowRoles_rest");
-                String wsResult = spec.retrieve().bodyToMono(String.class).block();
-
-                GroupWrapper[] wsGroups = gson.fromJson(wsResult, GroupWrapper[].class);
-                groups = Arrays.stream(wsGroups).map(wsGroup -> {
+                groups = groupModels.stream().map(wsGroup -> {
                     Group group = new GroupEntityImpl();
                     group.setId(wsGroup.getId());
                     group.setName(wsGroup.getName());
                     group.setType(wsGroup.getType());
                     return group;
                 }).collect(Collectors.toList());
-
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -219,6 +204,12 @@ public class GroupQueryImpl extends AbstractQuery<GroupQuery, Group> implements 
         groups.addAll(defaultGroups);
 
         return groups;
+    }
+
+    private void _putIfSet (Map<String,List<String>> params, String name, String val)
+    {
+        if (val != null && !val.isEmpty())
+            params.put(name, Collections.singletonList(val));
     }
 
     // getters ////////////////////////////////////////////////////////

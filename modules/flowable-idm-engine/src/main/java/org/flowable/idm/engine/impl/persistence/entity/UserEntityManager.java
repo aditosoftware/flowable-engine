@@ -16,6 +16,7 @@ package org.flowable.idm.engine.impl.persistence.entity;
 import java.util.List;
 import java.util.Map;
 
+import org.flowable.aditoDataService.AditoUserService;
 import org.flowable.common.engine.impl.persistence.entity.EntityManager;
 import org.flowable.idm.api.PasswordEncoder;
 import org.flowable.idm.api.PasswordSalt;
@@ -39,7 +40,7 @@ public interface UserEntityManager extends EntityManager<UserEntity> {
 
     UserQuery createNewUserQuery();
 
-    UserQuery createNewUserQuery(String aditoUrl);
+    UserQuery createNewUserQuery(AditoUserService aditoUserService);
 
     Boolean checkPassword(String userId, String password, PasswordEncoder passwordEncoder, PasswordSalt passwordSalt);
 

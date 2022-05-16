@@ -16,6 +16,7 @@ package org.flowable.idm.engine.impl.persistence.entity;
 import java.util.List;
 import java.util.Map;
 
+import org.flowable.aditoDataService.AditoUserService;
 import org.flowable.idm.api.PasswordEncoder;
 import org.flowable.idm.api.PasswordSalt;
 import org.flowable.idm.api.Picture;
@@ -98,8 +99,8 @@ public class UserEntityManagerImpl
     }
 
     @Override
-    public UserQuery createNewUserQuery(String aditoUrl) {
-        return new UserQueryImpl(getCommandExecutor(), aditoUrl);
+    public UserQuery createNewUserQuery(AditoUserService aditoUserService) {
+        return new UserQueryImpl(getCommandExecutor(), aditoUserService);
     }
 
     @Override

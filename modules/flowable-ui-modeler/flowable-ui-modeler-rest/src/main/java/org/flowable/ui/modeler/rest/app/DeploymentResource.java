@@ -1,7 +1,7 @@
 package org.flowable.ui.modeler.rest.app;
 
 import org.flowable.aditoDataService.AditoDeploymentService;
-import org.flowable.aditoDataService.Model.ProcessRepresentation;
+import org.flowable.aditoDataService.model.ProcessDeployment;
 import org.flowable.ui.modeler.domain.Model;
 import org.flowable.ui.modeler.serviceapi.ModelService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class DeploymentResource {
     private ModelService modelService;
 
     @PostMapping(value = "/rest/process-deploy/{modelId}")
-    public ProcessRepresentation deployProcess(@PathVariable String modelId)
+    public ProcessDeployment deployProcess(@PathVariable String modelId)
     {
         Model processModel = modelService.getModel(modelId);
         byte[] processModelXML = modelService.getBpmnXML(modelService.getBpmnModel(processModel));

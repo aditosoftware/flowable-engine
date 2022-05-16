@@ -114,7 +114,7 @@
 		<dependency>
 			<groupId>org.flowable</groupId>
 			<artifactId>adito-data-service</artifactId>
-			<version>6.5.0.1</version>
+			<version>6.5.0.27</version>
 		</dependency>
 	</dependencies>
 

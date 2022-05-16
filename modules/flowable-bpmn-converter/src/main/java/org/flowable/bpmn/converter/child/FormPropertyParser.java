@@ -14,12 +14,7 @@ package org.flowable.bpmn.converter.child;
 
 import org.apache.commons.lang3.StringUtils;
 import org.flowable.bpmn.converter.util.BpmnXMLUtil;
-import org.flowable.bpmn.model.BaseElement;
-import org.flowable.bpmn.model.BpmnModel;
-import org.flowable.bpmn.model.FormProperty;
-import org.flowable.bpmn.model.FormValue;
-import org.flowable.bpmn.model.StartEvent;
-import org.flowable.bpmn.model.UserTask;
+import org.flowable.bpmn.model.*;
 
 import javax.xml.stream.XMLStreamReader;
 
@@ -54,6 +49,7 @@ public class FormPropertyParser extends BaseChildElementParser {
         property.setExpression(xtr.getAttributeValue(null, ATTRIBUTE_FORM_EXPRESSION));
         property.setDefaultExpression(xtr.getAttributeValue(null, ATTRIBUTE_FORM_DEFAULT));
         property.setDatePattern(xtr.getAttributeValue(null, ATTRIBUTE_FORM_DATEPATTERN));
+        property.setConsumerName(xtr.getAttributeValue(null, ATTRIBUTE_FORM_CONSUMERNAME));
         if (StringUtils.isNotEmpty(xtr.getAttributeValue(null, ATTRIBUTE_FORM_REQUIRED))) {
             property.setRequired(Boolean.valueOf(xtr.getAttributeValue(null, ATTRIBUTE_FORM_REQUIRED)));
         }

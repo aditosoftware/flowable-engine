@@ -27,37 +27,8 @@ import org.flowable.bpmn.converter.export.FailedJobRetryCountExport;
 import org.flowable.bpmn.converter.export.FlowableListenerExport;
 import org.flowable.bpmn.converter.export.MultiInstanceExport;
 import org.flowable.bpmn.converter.util.BpmnXMLUtil;
-import org.flowable.bpmn.model.Activity;
-import org.flowable.bpmn.model.Artifact;
-import org.flowable.bpmn.model.BaseElement;
-import org.flowable.bpmn.model.BpmnModel;
-import org.flowable.bpmn.model.CancelEventDefinition;
-import org.flowable.bpmn.model.CompensateEventDefinition;
-import org.flowable.bpmn.model.ConditionalEventDefinition;
-import org.flowable.bpmn.model.DataObject;
-import org.flowable.bpmn.model.ErrorEventDefinition;
-import org.flowable.bpmn.model.EscalationEventDefinition;
-import org.flowable.bpmn.model.Event;
-import org.flowable.bpmn.model.EventDefinition;
-import org.flowable.bpmn.model.ExtensionAttribute;
-import org.flowable.bpmn.model.ExtensionElement;
-import org.flowable.bpmn.model.FlowElement;
-import org.flowable.bpmn.model.FlowNode;
-import org.flowable.bpmn.model.FormProperty;
-import org.flowable.bpmn.model.FormValue;
-import org.flowable.bpmn.model.Gateway;
-import org.flowable.bpmn.model.MessageEventDefinition;
+import org.flowable.bpmn.model.*;
 import org.flowable.bpmn.model.Process;
-import org.flowable.bpmn.model.SequenceFlow;
-import org.flowable.bpmn.model.ServiceTask;
-import org.flowable.bpmn.model.SignalEventDefinition;
-import org.flowable.bpmn.model.StartEvent;
-import org.flowable.bpmn.model.SubProcess;
-import org.flowable.bpmn.model.TerminateEventDefinition;
-import org.flowable.bpmn.model.ThrowEvent;
-import org.flowable.bpmn.model.TimerEventDefinition;
-import org.flowable.bpmn.model.UserTask;
-import org.flowable.bpmn.model.ValuedDataObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -364,6 +335,7 @@ public abstract class BaseBpmnXMLConverter implements BpmnXMLConstants {
                     writeDefaultAttribute(ATTRIBUTE_FORM_DEFAULT, property.getDefaultExpression(), xtw);
                     writeDefaultAttribute(ATTRIBUTE_FORM_DATEPATTERN, property.getDatePattern(), xtw);
                     writeDefaultAttribute(ATTRIBUTE_FORM_VISIBILITYEXPRESSION, property.getVisibilityExpression(), xtw);
+                    writeDefaultAttribute(ATTRIBUTE_FORM_CONSUMERNAME, property.getConsumerName(), xtw);
                     if (!property.isReadable()) {
                         writeDefaultAttribute(ATTRIBUTE_FORM_READABLE, ATTRIBUTE_VALUE_FALSE, xtw);
                     }

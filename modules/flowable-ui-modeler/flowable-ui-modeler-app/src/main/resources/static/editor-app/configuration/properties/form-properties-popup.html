@@ -42,8 +42,17 @@
                                     <option>boolean</option>
                                     <option>date</option>
                                     <option>enum</option>
+                                    <option>lookup</option>
                                 </select>
             				</div>
+                            <div class="form-group" ng-show="selectedProperty.type == 'lookup'">
+                                <label>{{'PROPERTY.FORMPROPERTIES.CONSUMERNAME' | translate}}</label>
+                                <div class="btn-group span">
+                                    <button class="selection" ng-options="consumer.id as consumer.name for consumer in consumerOptions"
+                                            bs-select ng-model="selectedProperty.consumerName"  activiti-fix-dropdown-bug>
+                                    </button>
+                                </div>
+                            </div>
                            	<div class="form-group" ng-show="selectedProperty.datePattern">
             			   		<label for="datePatternField">{{'PROPERTY.FORMPROPERTIES.DATEPATTERN' | translate}}</label>
             			   		<input id="datePatternField" class="form-control" type="text" ng-model="selectedProperty.datePattern" placeholder="{{'PROPERTY.FORMPROPERTIES.DATEPATTERN.PLACEHOLDER' | translate }}" />
@@ -73,7 +82,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="classField">{{'PROPERTY.FORMPROPERTIES.VALUES.NAME' | translate}}</label>
-                                                <input type="text" id="classField" class="form-control" ng-model="selectedEnumValue.name" placeholder="{{'PROPERTY.FORMPROPERTIES.VALUES.NAME.PLACEHOLDER' | translate}}" />
+                                                <input type="text" id="classField1" class="form-control" ng-model="selectedEnumValue.name" placeholder="{{'PROPERTY.FORMPROPERTIES.VALUES.NAME.PLACEHOLDER' | translate}}" />
                                             </div>
                                         </div>
                                         <div ng-show="!selectedEnumValue" class="muted no-property-selected" translate>PROPERTY.FORMPROPERTIES.ENUMVALUES.EMPTY</div>

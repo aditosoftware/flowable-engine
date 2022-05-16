@@ -16,6 +16,7 @@ package org.flowable.idm.engine.impl.persistence.entity;
 import java.util.List;
 import java.util.Map;
 
+import org.flowable.aditoDataService.AditoUserService;
 import org.flowable.common.engine.impl.persistence.entity.EntityManager;
 import org.flowable.idm.api.Group;
 import org.flowable.idm.api.GroupQuery;
@@ -30,7 +31,7 @@ public interface GroupEntityManager extends EntityManager<GroupEntity> {
 
     GroupQuery createNewGroupQuery();
 
-    GroupQuery createNewGroupQuery(String aditoUrl);
+    GroupQuery createNewGroupQuery(AditoUserService aditoUserService);
 
     List<Group> findGroupByQueryCriteria(GroupQueryImpl query);
 

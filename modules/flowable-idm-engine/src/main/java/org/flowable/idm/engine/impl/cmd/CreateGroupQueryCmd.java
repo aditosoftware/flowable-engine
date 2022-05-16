@@ -15,6 +15,7 @@ package org.flowable.idm.engine.impl.cmd;
 
 import java.io.Serializable;
 
+import org.flowable.aditoDataService.AditoUserService;
 import org.flowable.common.engine.impl.interceptor.Command;
 import org.flowable.common.engine.impl.interceptor.CommandContext;
 import org.flowable.idm.api.GroupQuery;
@@ -26,17 +27,17 @@ import org.flowable.idm.engine.impl.util.CommandContextUtil;
 public class CreateGroupQueryCmd implements Command<GroupQuery>, Serializable {
 
     private static final long serialVersionUID = 1L;
-    private String aditoUrl;
+    private AditoUserService aditoUserService;
 
     public CreateGroupQueryCmd () {}
 
-    public CreateGroupQueryCmd (String aditoUrl) {
-        this.aditoUrl = aditoUrl;
+    public CreateGroupQueryCmd (AditoUserService aditoUserService) {
+        this.aditoUserService = aditoUserService;
     }
 
     @Override
     public GroupQuery execute(CommandContext commandContext) {
-        return CommandContextUtil.getGroupEntityManager(commandContext).createNewGroupQuery(aditoUrl);
+        return CommandContextUtil.getGroupEntityManager(commandContext).createNewGroupQuery(aditoUserService);
     }
 
 }

@@ -29,7 +29,7 @@ angular.module('flowableModeler').controller('FlowableFormPropertiesCtrl',
     }]);
 
 angular.module('flowableModeler').controller('FlowableFormPropertiesPopupCtrl',
-    ['$scope', '$q', '$translate', '$timeout', function ($scope, $q, $translate, $timeout) {
+    ['$scope', '$q', '$translate', '$timeout', 'EntityService', function ($scope, $q, $translate, $timeout, EntityService) {
 
         // Put json representing form properties on scope
         if ($scope.property.value !== undefined && $scope.property.value !== null
@@ -65,6 +65,18 @@ angular.module('flowableModeler').controller('FlowableFormPropertiesPopupCtrl',
         var idPromise = $translate('PROPERTY.FORMPROPERTIES.ID');
         var namePromise = $translate('PROPERTY.FORMPROPERTIES.NAME');
         var typePromise = $translate('PROPERTY.FORMPROPERTIES.TYPE');
+
+        $scope.consumerOptions = [];
+        $scope.hasConsumerOptionsLoaded = false;
+        $scope.initConsumerOptions = function () {
+            if (!$scope.hasConsumerOptionsLoaded) {
+                EntityService.getConsumers().then(function (result) {
+                    for (let consumer of result)
+                        $scope.consumerOptions.push(consumer);
+                    $scope.hasConsumerOptionsLoaded = true;
+                });
+            }
+        };
 
         $q.all([idPromise, namePromise, typePromise]).then(function (results) {
             $scope.labels.idLabel = results[0];
@@ -114,6 +126,10 @@ angular.module('flowableModeler').controller('FlowableFormPropertiesPopupCtrl',
                             $scope.enumValues.push($scope.selectedProperty.enumValues[i]);
                         }
                     }
+                    if ($scope.selectedProperty.type == 'lookup')
+                    {
+                        $scope.initConsumerOptions();
+                    }
                 });
             };
             
@@ -134,6 +150,13 @@ angular.module('flowableModeler').controller('FlowableFormPropertiesPopupCtrl',
                 $scope.selectedProperty.datePattern = 'MM-dd-yyyy hh:mm';
             } else {
                 delete $scope.selectedProperty.datePattern;
+            }
+
+            if ($scope.selectedProperty.type === 'lookup') {
+                $scope.initConsumerOptions();
+                $scope.selectedProperty.consumerName = '';
+            } else {
+                delete $scope.selectedProperty.consumerName;
             }
 
             // Check enum. If enum, show list of options

@@ -1,7 +1,7 @@
 package org.flowable.ui.modeler.rest.app;
 
 import org.flowable.aditoDataService.JditoProcessService;
-import org.flowable.aditoDataService.Model.TaskVariableRepresentation;
+import org.flowable.aditoDataService.model.TaskFormField;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,8 +20,8 @@ public class TaskVariablesResource {
     private JditoProcessService jditoProcessService;
 
     @GetMapping(value = "/rest/taskvariables")
-    public List<TaskVariableRepresentation> getVariables(@RequestParam(value = "jditoProcess", required = false) String jditoProcess,
-                                                         @RequestParam(value = "currentValues", required = false) String currentValues) {
+    public List<TaskFormField> getVariables(@RequestParam(value = "jditoProcess", required = false) String jditoProcess,
+                                            @RequestParam(value = "currentValues", required = false) String currentValues) {
 
         return jditoProcessService.getVariables(jditoProcess, currentValues);
     }
