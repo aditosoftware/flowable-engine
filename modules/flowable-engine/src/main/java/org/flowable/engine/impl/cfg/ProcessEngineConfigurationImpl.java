@@ -208,15 +208,7 @@ import org.flowable.engine.impl.event.MessageEventHandler;
 import org.flowable.engine.impl.event.SignalEventHandler;
 import org.flowable.engine.impl.event.logger.EventLogger;
 import org.flowable.engine.impl.eventregistry.BpmnEventRegistryEventConsumer;
-import org.flowable.engine.impl.form.BooleanFormType;
-import org.flowable.engine.impl.form.DateFormType;
-import org.flowable.engine.impl.form.DoubleFormType;
-import org.flowable.engine.impl.form.FormEngine;
-import org.flowable.engine.impl.form.FormHandlerHelper;
-import org.flowable.engine.impl.form.FormTypes;
-import org.flowable.engine.impl.form.JuelFormEngine;
-import org.flowable.engine.impl.form.LongFormType;
-import org.flowable.engine.impl.form.StringFormType;
+import org.flowable.engine.impl.form.*;
 import org.flowable.engine.impl.formhandler.DefaultFormFieldHandler;
 import org.flowable.engine.impl.history.DefaultHistoryManager;
 import org.flowable.engine.impl.history.DefaultHistoryTaskManager;
@@ -2406,6 +2398,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
             formTypes.addFormType(new DateFormType("dd/MM/yyyy"));
             formTypes.addFormType(new BooleanFormType());
             formTypes.addFormType(new DoubleFormType());
+            formTypes.addFormType(new LookupFormType());
         }
         if (customFormTypes != null) {
             for (AbstractFormType customFormType : customFormTypes) {

@@ -65,6 +65,11 @@ public class FormPropertyImpl implements FormProperty {
     }
 
     @Override
+    public String getConsumer() {
+        return null;
+    }
+
+    @Override
     public boolean isReadable() {
         return isReadable;
     }

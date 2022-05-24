@@ -1084,6 +1084,11 @@
 				<version>2.13.0</version>
 				<scope>test</scope>
 			</dependency>
+			<dependency>
+				<groupId>io.projectreactor</groupId>
+				<artifactId>reactor-core</artifactId>
+				<version>3.3.3.RELEASE</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -2011,15 +2016,16 @@
 		<developerConnection>scm:git:git@github.com:flowable/flowable-engine.git</developerConnection>
 	</scm>
 	<distributionManagement>
-		<snapshotRepository>
-			<id>sonatype-nexus-snapshots</id>
-			<name>Sonatype Nexus Snapshots</name>
-			<url>${distributionManagementSnapshotsUrl}</url>
-		</snapshotRepository>
 		<repository>
-			<id>sonatype-nexus-staging</id>
-			<name>Nexus Release Repository</name>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+			<id>adito.m2</id>
+			<name>releases</name>
+			<url>${repository.releases}</url>
 		</repository>
+		<snapshotRepository>
+			<id>adito.m2</id>
+			<name>snapshots</name>
+			<url>${repository.snapshots}</url>
+			<uniqueVersion>false</uniqueVersion>
+		</snapshotRepository>
 	</distributionManagement>
 </project>

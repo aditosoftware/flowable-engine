@@ -27,6 +27,7 @@ public class FormPropertyImpl implements FormProperty {
     protected boolean isRequired;
     protected boolean isReadable;
     protected boolean isWritable;
+    protected String consumer;
 
     protected String value;
 
@@ -37,6 +38,7 @@ public class FormPropertyImpl implements FormProperty {
         this.isRequired = formPropertyHandler.isRequired();
         this.isReadable = formPropertyHandler.isReadable();
         this.isWritable = formPropertyHandler.isWritable();
+        this.consumer = formPropertyHandler.getConsumer();
     }
 
     @Override
@@ -76,5 +78,10 @@ public class FormPropertyImpl implements FormProperty {
     @Override
     public boolean isWritable() {
         return isWritable;
+    }
+
+    @Override
+    public String getConsumer() {
+        return consumer;
     }
 }

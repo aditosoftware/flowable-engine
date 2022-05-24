@@ -43,6 +43,7 @@ public class FormPropertyHandler implements Serializable {
     protected Expression variableExpression;
     protected Expression defaultExpression;
     protected Expression visibilityExpression;
+    protected String consumer;
 
     public boolean isVisible (ExecutionEntity execution, Map<String, Object> currentValues)
     {
@@ -225,5 +226,13 @@ public class FormPropertyHandler implements Serializable {
 
     public void setVisibilityExpression(Expression visibilityExpression) {
         this.visibilityExpression = visibilityExpression;
+    }
+
+    public String getConsumer() {
+        return consumer;
+    }
+
+    public void setConsumer(String consumer) {
+        this.consumer = consumer;
     }
 }

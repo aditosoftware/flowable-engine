@@ -62,6 +62,7 @@ public class DefaultFormHandler implements FormHandler {
             formPropertyHandler.setReadable(formProperty.isReadable());
             formPropertyHandler.setWritable(formProperty.isWriteable());
             formPropertyHandler.setVariableName(formProperty.getVariable());
+            formPropertyHandler.setConsumer(formProperty.getConsumerName());
 
             if (StringUtils.isNotEmpty(formProperty.getExpression())) {
                 Expression expression = expressionManager.createExpression(formProperty.getExpression());

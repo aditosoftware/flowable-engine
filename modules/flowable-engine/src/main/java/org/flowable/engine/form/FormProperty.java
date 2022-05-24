@@ -48,4 +48,6 @@ public interface FormProperty extends Serializable {
 
     /** Is this property a required input field */
     boolean isRequired();
+
+    String getConsumer();
 }
