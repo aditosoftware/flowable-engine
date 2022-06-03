@@ -276,6 +276,10 @@ public class UserQueryImpl extends AbstractQuery<UserQuery, User> implements Use
     public List<User> executeList(CommandContext commandContext)
     {
         List<User> users = new ArrayList<>();
+        List<User> defaultUsers = CommandContextUtil.getUserEntityManager(commandContext).findUserByQueryCriteria(this);
+        if (this.id != null && !this.id.isEmpty() && defaultUsers.size() == 1)
+            return defaultUsers;
+
         if (this.aditoUserService != null)
         {
             try {
@@ -317,7 +321,6 @@ public class UserQueryImpl extends AbstractQuery<UserQuery, User> implements Use
                 e.printStackTrace();
             }
         }
-        List<User> defaultUsers = CommandContextUtil.getUserEntityManager(commandContext).findUserByQueryCriteria(this);
 
         users.addAll(defaultUsers);
 

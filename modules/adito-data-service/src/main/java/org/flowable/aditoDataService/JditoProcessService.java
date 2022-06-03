@@ -2,6 +2,8 @@ package org.flowable.aditoDataService;
 
 import com.google.gson.Gson;
 import org.flowable.aditoDataService.model.TaskFormField;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -15,6 +17,8 @@ public class JditoProcessService
     @Autowired
     protected RestClientService restClientService;
 
+    private final Logger logger = LoggerFactory.getLogger(JditoProcessService.class);
+
     public Map<String, String> getProcesses() {
 
         Map<String, String> processes = new HashMap<>();
@@ -26,7 +30,7 @@ public class JditoProcessService
             Arrays.stream(wsProcesses).forEach(wsProcess -> processes.put(wsProcess.id, wsProcess.name));
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Failed to load jdito processes", e);
         }
 
         return processes;
@@ -37,6 +41,7 @@ public class JditoProcessService
         List<TaskFormField> variables = new ArrayList<>();
 
         try {
+            logger.debug("GET " + RestURLs.JDITOPROCESS);
             MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
             //queryParams.put("jditoprocess", Collections.singletonList(jditoProcess));
             //queryParams.put("currentvalues", Collections.singletonList(currentValues));
@@ -50,7 +55,7 @@ public class JditoProcessService
             variables = Arrays.asList(wsVars);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Failed to load jdito process parameters", e);
         }
 
         return variables;
