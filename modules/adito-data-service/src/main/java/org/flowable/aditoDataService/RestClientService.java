@@ -19,13 +19,6 @@ import java.util.Map;
 @Service
 public class RestClientService
 {
-    @Value("${aditoUrl:}")
-    private String springAditoBaseUrl;
-    @Value("${aditoUser:}")
-    private String springAditoUser;
-    @Value("${aditoPassword:}")
-    private String springAditoPassword;
-
     private String aditoBaseUrl = "https://host.docker.internal:8443";
     private String aditoUser = "flowableIdmService";
     private String aditoPassword = "HczABCxBEUKSmwQEnT8vbmkE8Bj1hcXOKSbsLWBg";
@@ -42,12 +35,12 @@ public class RestClientService
         return aditoBaseUrl;
     }
 
-    public RestClientService ()
+    public RestClientService (@Value("${aditoUrl:}") String springAditoBaseUrl, @Value("${aditoUser:}") String springAditoUser, @Value("${aditoPassword:}") String springAditoPassword)
     {
         if (environmentVariablesArePresent())
             loadEndpointConfigFromEnvironment();
-        else if (springVariablesArePresent())
-            loadEndpointConfigFromSpring();
+        else if (springVariablesArePresent(springAditoBaseUrl))
+            loadEndpointConfigFromSpring(springAditoBaseUrl, springAditoUser, springAditoPassword);
         else
             logger.info("Using default core connection configuration");
 
@@ -76,9 +69,9 @@ public class RestClientService
         return (baseUrl != null && !baseUrl.isEmpty());
     }
 
-    private boolean springVariablesArePresent()
+    private boolean springVariablesArePresent(String pBaseUrl)
     {
-        return (springAditoBaseUrl != null && !springAditoBaseUrl.isEmpty());
+        return (pBaseUrl != null && !pBaseUrl.isEmpty());
     }
 
     private void loadEndpointConfigFromEnvironment()
@@ -95,7 +88,7 @@ public class RestClientService
             this.aditoPassword = password;
     }
 
-    private void loadEndpointConfigFromSpring()
+    private void loadEndpointConfigFromSpring(String springAditoBaseUrl, String springAditoUser, String springAditoPassword)
     {
         logger.info("Loading core connection configuration from spring application json");
         if (springAditoBaseUrl != null && !springAditoBaseUrl.isEmpty())

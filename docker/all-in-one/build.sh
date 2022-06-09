@@ -37,4 +37,4 @@ cd $BASE_PWD
 
 echo "Building Docker image for version: $FLOWABLE_VERSION"
 
-docker build -t adito/flowable:2022.0.3 .
+docker build -t adito/flowable:2022.0.3.1 .
