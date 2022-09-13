@@ -1,5 +1,6 @@
 package org.flowable.aditoDataService;
 
+import com.google.gson.Gson;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
@@ -101,19 +102,21 @@ public class RestClientService
 
     public String get(String url, MultiValueMap<String, String> queryParams, Map<String,String> headers)
     {
-
+        WebClient.RequestHeadersUriSpec<?> spec = getWebClient().get();
         if (queryParams == null || queryParams.isEmpty())
-            return get(url);
-        WebClient.RequestHeadersSpec<?> spec = getWebClient().get().uri(uriBuilder -> uriBuilder.path(url).queryParams(queryParams).build());
+            spec.uri(url);
+        else
+            spec.uri(uriBuilder -> uriBuilder.path(url).queryParams(queryParams).build());
+
         if (headers != null)
             headers.forEach(spec::header);
+        logger.info("headers: " + new Gson().toJson(headers));
         return spec.retrieve().bodyToMono(String.class).block();
     }
 
     protected String get(String url)
     {
-        WebClient.RequestHeadersSpec<?> spec = getWebClient().get().uri(url);
-        return spec.retrieve().bodyToMono(String.class).block();
+        return get(url, null, null);
     }
 
 }
