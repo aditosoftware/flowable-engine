@@ -1,12 +1,12 @@
-FROM adoptopenjdk/openjdk16:jdk-16_36-alpine-slim
+FROM eclipse-temurin:21.0.6_7-jdk-alpine-3.21
 ADD wait-for-something.sh .
 
 RUN apk update && apk add fontconfig ghostscript-fonts && rm -rf /var/cache/apk/*
 
 RUN addgroup tomcat && adduser -s /bin/false -G tomcat -h /opt/tomcat -D tomcat
 
-RUN wget https://downloads.apache.org/tomcat/tomcat-8/v8.5.78/bin/apache-tomcat-8.5.78.tar.gz -O /tmp/tomcat.tar.gz
-RUN cd /tmp && tar xvfz tomcat.tar.gz && cp -Rv /tmp/apache-tomcat-8.5.78/* /opt/tomcat/ && rm -Rf /tmp/apache-tomcat-8.5.78
+RUN wget http://archive.apache.org/dist/tomcat/tomcat-9/v9.0.14/bin/apache-tomcat-9.0.14.tar.gz -O /tmp/tomcat.tar.gz
+RUN cd /tmp && tar xvfz tomcat.tar.gz && cp -Rv /tmp/apache-tomcat-9.0.14/* /opt/tomcat/ && rm -Rf /tmp/apache-tomcat-9.0.14
 
 COPY context.xml /opt/tomcat/conf/context.xml
 
