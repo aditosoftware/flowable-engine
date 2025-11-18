@@ -23,25 +23,29 @@ public class RestClientService
     private String aditoBaseUrl = "https://host.docker.internal:8443";
     private String aditoUser = "flowableIdmService";
     private String aditoPassword = "HczABCxBEUKSmwQEnT8vbmkE8Bj1hcXOKSbsLWBg";
+    private String aditoExternalUrl;
 
     private WebClient webClient;
     private final Logger logger = LoggerFactory.getLogger(RestClientService.class);
 
-    public WebClient getWebClient ()
+    public WebClient getWebClient()
     {
         return this.webClient;
     }
 
-    public String getAditoBaseUrl() {
+    public String getAditoExternalUrl() {
+        if (aditoExternalUrl != null)
+            return aditoExternalUrl;
         return aditoBaseUrl;
     }
 
-    public RestClientService (@Value("${aditoUrl:}") String springAditoBaseUrl, @Value("${aditoUser:}") String springAditoUser, @Value("${aditoPassword:}") String springAditoPassword)
+    public RestClientService(@Value("${aditoUrl:}") String springAditoBaseUrl, @Value("${aditoUser:}") String springAditoUser, @Value("${aditoPassword:}") String springAditoPassword,
+                             @Value("${aditoExternalUrl:}") String springAditoExternalUrl)
     {
         if (environmentVariablesArePresent())
             loadEndpointConfigFromEnvironment();
         else if (springVariablesArePresent(springAditoBaseUrl))
-            loadEndpointConfigFromSpring(springAditoBaseUrl, springAditoUser, springAditoPassword);
+            loadEndpointConfigFromSpring(springAditoBaseUrl, springAditoUser, springAditoPassword, springAditoExternalUrl);
         else
             logger.info("Using default core connection configuration");
 
@@ -87,9 +91,12 @@ public class RestClientService
         String password = System.getenv("ADITO_PASSWORD");
         if (password != null && !password.isEmpty())
             this.aditoPassword = password;
+        String aditoExternalUrl = System.getenv("ADITO_EXTERNAL_URL");
+        if (aditoExternalUrl != null && !aditoExternalUrl.isEmpty())
+            this.aditoExternalUrl = aditoExternalUrl;
     }
 
-    private void loadEndpointConfigFromSpring(String springAditoBaseUrl, String springAditoUser, String springAditoPassword)
+    private void loadEndpointConfigFromSpring(String springAditoBaseUrl, String springAditoUser, String springAditoPassword, String springAditoExternalUrl)
     {
         logger.info("Loading core connection configuration from spring application json");
         if (springAditoBaseUrl != null && !springAditoBaseUrl.isEmpty())
@@ -98,6 +105,8 @@ public class RestClientService
             this.aditoUser = springAditoUser;
         if (springAditoPassword != null && !springAditoPassword.isEmpty())
             this.aditoPassword = springAditoPassword;
+        if (springAditoPassword != null && !springAditoPassword.isEmpty())
+            this.aditoExternalUrl = springAditoExternalUrl;
     }
 
     public String get(String url, MultiValueMap<String, String> queryParams, Map<String,String> headers)
@@ -118,5 +127,4 @@ public class RestClientService
     {
         return get(url, null, null);
     }
-
 }

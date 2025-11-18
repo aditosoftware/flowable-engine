@@ -29,7 +29,7 @@ public class DeploymentResource {
     }
 
     @GetMapping(value = "/rest/adito-process-definition-url", produces = "text/plain")
-    public String getAditoProcessDefinitionUrl ()
+    public String getAditoProcessDefinitionUrl()
     {
         return aditoDeploymentService.getProcessDefinitionUrl();
     }

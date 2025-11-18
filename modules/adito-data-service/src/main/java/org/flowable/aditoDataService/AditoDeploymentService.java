@@ -42,10 +42,10 @@ public class AditoDeploymentService
         return null;
     }
 
-    public String getProcessDefinitionUrl ()
+    public String getProcessDefinitionUrl()
     {
         if (disableDeployRedirect)
             return null;
-        return restClientService.getAditoBaseUrl().replace("host.docker.internal", "localhost") + aditoProcessDefinitionUrl;
+        return restClientService.getAditoExternalUrl().replace("host.docker.internal", "localhost") + aditoProcessDefinitionUrl;
     }
 }
