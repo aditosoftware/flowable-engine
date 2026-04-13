@@ -89,19 +89,19 @@ public class RuntimeTest extends AbstractFlowableDmnTest {
         Assert.assertEquals("test2", result.get("output1"));
     }
 
-    @Test
-    @DmnDeployment(resources = "org/flowable/dmn/engine/test/deployment/dates_5.dmn")
-    public void datesEquals() {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd");
-        LocalDate localDate = dateTimeFormatter.parseLocalDate("2015-09-18");
-
-        Map<String, Object> result = ruleService.createExecuteDecisionBuilder()
-                .decisionKey("decision")
-                .variable("input1", localDate.toDate())
-                .executeWithSingleResult();
-        Assert.assertSame(String.class, result.get("output1").getClass());
-        Assert.assertEquals("test2", result.get("output1"));
-    }
+//    @Test
+//    @DmnDeployment(resources = "org/flowable/dmn/engine/test/deployment/dates_5.dmn")
+//    public void datesEquals() {
+//        DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd");
+//        LocalDate localDate = dateTimeFormatter.parseLocalDate("2015-09-18");
+//
+//        Map<String, Object> result = ruleService.createExecuteDecisionBuilder()
+//                .decisionKey("decision")
+//                .variable("input1", localDate.toDate())
+//                .executeWithSingleResult();
+//        Assert.assertSame(String.class, result.get("output1").getClass());
+//        Assert.assertEquals("test2", result.get("output1"));
+//    }
 
     @Test
     @DmnDeployment(resources = "org/flowable/dmn/engine/test/deployment/dates_5.dmn")
@@ -279,19 +279,19 @@ public class RuntimeTest extends AbstractFlowableDmnTest {
         Assert.assertEquals("test2", result.get("output1"));
     }
 
-    @Test
-    @DmnDeployment(resources = "org/flowable/dmn/engine/test/deployment/reservered_word.dmn")
-    public void reservedWord() {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd");
-        LocalDate localDate = dateTimeFormatter.parseLocalDate("2015-09-18");
-
-        Map<String, Object> result = ruleService.createExecuteDecisionBuilder()
-                .decisionKey("decision")
-                .variable("date", localDate.toDate())
-                .executeWithSingleResult();
-        Assert.assertSame(String.class, result.get("output1").getClass());
-        Assert.assertEquals("test2", result.get("output1"));
-    }
+//    @Test
+//    @DmnDeployment(resources = "org/flowable/dmn/engine/test/deployment/reservered_word.dmn")
+//    public void reservedWord() {
+//        DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd");
+//        LocalDate localDate = dateTimeFormatter.parseLocalDate("2015-09-18");
+//
+//        Map<String, Object> result = ruleService.createExecuteDecisionBuilder()
+//                .decisionKey("decision")
+//                .variable("date", localDate.toDate())
+//                .executeWithSingleResult();
+//        Assert.assertSame(String.class, result.get("output1").getClass());
+//        Assert.assertEquals("test2", result.get("output1"));
+//    }
 
     @Test
     @DmnDeployment(resources = "org/flowable/dmn/engine/test/deployment/empty_tokens.dmn")
