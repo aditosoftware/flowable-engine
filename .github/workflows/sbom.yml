@@ -34,29 +34,29 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: 22.x
+      #- name: Set up Node.js
+      #  uses: actions/setup-node@v6
+      #  with:
+      #    node-version: 22.x
 
-      - name: Install dependencies (root)
-        run: npm ci --ignore-scripts
+      #- name: Install dependencies (root)
+      #  run: npm ci --ignore-scripts
 
-      - name: Install deps (webview-ui)
-        working-directory: webview-ui
-        run: npm ci --ignore-scripts
+      #- name: Install deps (webview-ui)
+      #  working-directory: webview-ui
+      #  run: npm ci --ignore-scripts
 
-      - name: Install cyclonedx-npm
-        run: npm install --global --ignore-scripts @cyclonedx/cyclonedx-npm
+      #- name: Install cyclonedx-npm
+      #  run: npm install --global --ignore-scripts @cyclonedx/cyclonedx-npm
 
-      - name: Generate SBOM (root)
-        run: cyclonedx-npm --omit=dev --output-file sbom/sbom-root.json
+      #- name: Generate SBOM (root)
+      #  run: cyclonedx-npm --omit=dev --output-file sbom/sbom-root.json
 
-      - name: Generate SBOM (webview-ui)
-        run: cyclonedx-npm --omit=dev --output-file sbom/sbom-webview-ui.json webview-ui/package.json
+      #- name: Generate SBOM (webview-ui)
+      #  run: cyclonedx-npm --omit=dev --output-file sbom/sbom-webview-ui.json webview-ui/package.json
 
-      - name: Prepare directory for SBOM JARs
-        run: npm run prepareSbomJarCreation
+      #- name: Prepare directory for SBOM JARs
+      #  run: npm run prepareSbomJarCreation
 
       - name: Create SBOM for JARs
         uses: anchore/sbom-action@e22c389904149dbc22b58101806040fa8d37a610
@@ -73,8 +73,7 @@ jobs:
             -v "${GITHUB_WORKSPACE}:/work" \
             -w /work \
             cyclonedx/cyclonedx-cli \
-            merge --input-files sbom/sbom-root.json sbom/sbom-webview-ui.json sbom/sbom-jars.json --output-file sbom/combined-sbom.json
-
+            cp sbom/sbom-root.json sbom/combined-sbom.json
 
       - name: Convert combined SBOM to CycloneDX 1.6
         run: |
