@@ -1,4 +1,4 @@
-name: Flowable Main Build
+name: Flowable SBOM Build
 
 on:
   release:
