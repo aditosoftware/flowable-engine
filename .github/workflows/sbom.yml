@@ -19,7 +19,7 @@ jobs:
     - name: Install
       run: ./mvnw clean install -V -B --no-transfer-progress -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Pdistro
     - name: Build an image from Dockerfile
-      run: docker/all-in-one/build.sh ${{ github.ref_name }}
+      run: cd docker/all-in-one && ./build.sh ${{ github.ref_name }}
 
   sbom:
     name: Generate merged SBOM
@@ -33,8 +33,8 @@ jobs:
         run: |
           mvn -T 1C org.cyclonedx:cyclonedx-maven-plugin:makeAggregateBom
 
-      - name: Build an image from Dockerfile
-        run: docker build -t docker.io/adito/flowable:${{ github.ref_name }} .
+      #- name: Build an image from Dockerfile
+      #  run: docker build -t docker.io/adito/flowable:${{ github.ref_name }} .
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.35.0
         with:
