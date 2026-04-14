@@ -6,7 +6,7 @@ on:
       - created
 
 jobs:
-  test_jdk:
+  build_java_and_docker:
     name: Linux (JDK 13)
     runs-on: ubuntu-latest
     steps:
@@ -19,13 +19,13 @@ jobs:
     - name: Install
       run: ./mvnw install -V -B --no-transfer-progress -DskipTests=true -Dmaven.javadoc.skip=true -B -V
     - name: Build an image from Dockerfile
-      run: docker/all-in-one/build.sh
+      run: docker/all-in-one/build.sh ${{ github.ref_name }}
 
   sbom:
     name: Generate merged SBOM
     if: github.event_name == 'release' || (github.ref_name == 'main' && github.event_name != 'pull_request')
     runs-on: ubuntu-latest
-    needs: test_jdk
+    needs: build_java_and_docker
     steps:
       - uses: actions/checkout@v6
 

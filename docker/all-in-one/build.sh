@@ -1,7 +1,7 @@
 #!/bin/sh
 dir >> log.txt
 BASE_PWD="$PWD"
-FLOWABLE_VERSION=6.5.0
+FLOWABLE_VERSION=${1:-6.5.0}
 
 echo "Initializing for version $FLOWABLE_VERSION"
 
@@ -37,4 +37,4 @@ cd $BASE_PWD
 
 echo "Building Docker image for version: $FLOWABLE_VERSION"
 
-docker build -t adito/flowable:2026.0.1 .
+docker build -t adito/flowable:$FLOWABLE_VERSION .
