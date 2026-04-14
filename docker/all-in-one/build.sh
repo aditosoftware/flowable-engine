@@ -38,5 +38,3 @@ cd $BASE_PWD
 echo "Building Docker image for version: $FLOWABLE_VERSION"
 
 docker build -t adito/flowable:$FLOWABLE_VERSION --load .
-
-# --load
