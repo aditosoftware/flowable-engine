@@ -9,7 +9,7 @@ mkdir -p $BASE_PWD/assets && rm -f $BASE_PWD/assets/*.original
 
 echo "Building Flowable IDM"
 cd ../../modules/flowable-ui-idm
-mvn -T 1C clean install -DskipTests -Pdistro,docker-deps
+mvn -T 1C clean install -DskipTests
 STATUS=$?
 if [ $STATUS -eq 0 ]
 then
@@ -23,7 +23,7 @@ cd $BASE_PWD
 
 echo "Building Flowable Modeler"
 cd ../../modules/flowable-ui-modeler
-mvn -T 1C clean install -DskipTests -Pdistro,docker-deps
+mvn -T 1C clean install -DskipTests
 STATUS=$?
 if [ $STATUS -eq 0 ]
 then
@@ -37,6 +37,6 @@ cd $BASE_PWD
 
 echo "Building Docker image for version: $FLOWABLE_VERSION"
 
-docker build -t adito/flowable:$FLOWABLE_VERSION .
+docker build -t adito/flowable:$FLOWABLE_VERSION --load .
 
 # --load
