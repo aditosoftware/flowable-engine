@@ -17,7 +17,7 @@ jobs:
       with:
         java-version: 13
     - name: Install
-      run: ./mvnw install -V -B --no-transfer-progress -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+      run: ./mvnw clean install -V -B --no-transfer-progress -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Pdistro
     - name: Build an image from Dockerfile
       run: docker/all-in-one/build.sh ${{ github.ref_name }}
 
