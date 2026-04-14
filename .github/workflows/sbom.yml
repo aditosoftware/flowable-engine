@@ -55,8 +55,8 @@ jobs:
       #- name: Generate SBOM (webview-ui)
       #  run: cyclonedx-npm --omit=dev --output-file sbom/sbom-webview-ui.json webview-ui/package.json
 
-      #- name: Prepare directory for SBOM JARs
-      #  run: npm run prepareSbomJarCreation
+      - name: Prepare directory for SBOM JARs
+        run: npm run prepareSbomJarCreation
 
       - name: Create SBOM for JARs
         uses: anchore/sbom-action@e22c389904149dbc22b58101806040fa8d37a610

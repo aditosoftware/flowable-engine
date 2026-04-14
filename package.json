@@ -1,0 +1,16 @@
+{
+  "name": "flowable-modeler",
+  "displayName": "Flowable Modeler Adito",
+  "publisher": "adito",
+  "version": "2026.0.1",
+
+  "scripts": {
+    "prepareSbomJarCreation": "npm run clean-compile &&  node out/test/sbom/sbom-creation.js"
+  },
+  "dependencies": {
+    "properties-file": "^4.0.0"
+  },
+  "devDependencies": {
+
+  }
+}
