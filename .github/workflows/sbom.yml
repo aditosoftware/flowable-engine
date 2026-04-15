@@ -20,6 +20,8 @@ jobs:
       run: ./mvnw clean install -V -B --no-transfer-progress -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Pdistro
     - name: Build an image from Dockerfile
       run: cd docker/all-in-one && ./build.sh ${{ github.ref_name }}
+    #- name: Save Docker image
+    #  run: docker save my-image:tag -o image.tar
 
   sbom:
     name: Generate merged SBOM
@@ -38,7 +40,7 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.35.0
         with:
-          image-ref: 'adito/flowable:${{ github.ref_name }}'
+          image-ref: 'flowable:${{ github.ref_name }}'
           format: 'cyclonedx'
           output: 'target/trivy.json'
 
