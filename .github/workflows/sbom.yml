@@ -9,6 +9,8 @@ jobs:
   build_java_and_docker:
     name: Linux (JDK 13)
     runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: adito/flowable
     steps:
     - uses: actions/checkout@v2-beta
       with:
@@ -20,8 +22,13 @@ jobs:
       run: ./mvnw clean install -V -B --no-transfer-progress -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Pdistro
     - name: Build an image from Dockerfile
       run: cd docker/all-in-one && ./build.sh ${{ github.ref_name }}
-    #- name: Save Docker image
-    #  run: docker save my-image:tag -o image.tar
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Push image to Docker Hub
+      run: docker push $IMAGE_NAME:${{ github.ref_name }}
 
     - name: Create SBOM for Jars
       run: |
@@ -32,7 +39,7 @@ jobs:
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@0.35.0
       with:
-        image-ref: 'adito/flowable:${{ github.ref_name }}'
+        image-ref: '${{ env.IMAGE_NAME }}:${{ github.ref_name }}'
         format: 'cyclonedx'
         output: 'target/trivy.json'
 
@@ -51,6 +58,12 @@ jobs:
           -w /work \
           cyclonedx/cyclonedx-cli \
           convert --input-file target/combined-sbom.json --output-file target/combined-sbom-1.6.json --output-version v1_6 --output-format json
+
+    - name: Install Cosign
+      uses: sigstore/cosign-installer@v3.7.0
+
+    - name: Attach SBOM to image in Docker Hub
+      run: cosign attach sbom --sbom target/combined-sbom-1.6.json --type cyclonedx $IMAGE_NAME:${{ github.ref_name }}
 
     - name: Upload SBOM to Dependency-Track
       uses: DependencyTrack/gh-upload-sbom@48feab3080ff9e8f51f4d21861d9fc914eb744f5
