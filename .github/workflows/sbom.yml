@@ -23,50 +23,42 @@ jobs:
     #- name: Save Docker image
     #  run: docker save my-image:tag -o image.tar
 
-  sbom:
-    name: Generate merged SBOM
-    if: github.event_name == 'release' || (github.ref_name == 'main' && github.event_name != 'pull_request')
-    runs-on: ubuntu-latest
-    needs: build_java_and_docker
-    steps:
-      - uses: actions/checkout@v6
+    - name: Create SBOM for Jars
+      run: |
+        mvn -T 1C org.cyclonedx:cyclonedx-maven-plugin:makeAggregateBom
 
-      - name: Create SBOM for Jars
-        run: |
-          mvn -T 1C org.cyclonedx:cyclonedx-maven-plugin:makeAggregateBom
+    #- name: Build an image from Dockerfile
+    #  run: docker build -t docker.io/adito/flowable:${{ github.ref_name }} .
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@0.35.0
+      with:
+        image-ref: 'adito/flowable:${{ github.ref_name }}'
+        format: 'cyclonedx'
+        output: 'target/trivy.json'
 
-      #- name: Build an image from Dockerfile
-      #  run: docker build -t docker.io/adito/flowable:${{ github.ref_name }} .
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@0.35.0
-        with:
-          image-ref: 'flowable:${{ github.ref_name }}'
-          format: 'cyclonedx'
-          output: 'target/trivy.json'
+    - name: Merge + validate (CycloneDX CLI via Docker)
+      run: |
+        docker run --rm \
+          -v "${GITHUB_WORKSPACE}:/work" \
+          -w /work \
+          cyclonedx/cyclonedx-cli \
+          merge --input-files target/bom.json target/trivy.json --output-file target/combined-sbom.json
 
-      - name: Merge + validate (CycloneDX CLI via Docker)
-        run: |
-          docker run --rm \
-            -v "${GITHUB_WORKSPACE}:/work" \
-            -w /work \
-            cyclonedx/cyclonedx-cli \
-            merge --input-files target/bom.json target/trivy.json --output-file target/combined-sbom.json
+    - name: Convert combined SBOM to CycloneDX 1.6
+      run: |
+        docker run --rm \
+          -v "${GITHUB_WORKSPACE}:/work" \
+          -w /work \
+          cyclonedx/cyclonedx-cli \
+          convert --input-file target/combined-sbom.json --output-file target/combined-sbom-1.6.json --output-version v1_6 --output-format json
 
-      - name: Convert combined SBOM to CycloneDX 1.6
-        run: |
-          docker run --rm \
-            -v "${GITHUB_WORKSPACE}:/work" \
-            -w /work \
-            cyclonedx/cyclonedx-cli \
-            convert --input-file target/combined-sbom.json --output-file target/combined-sbom-1.6.json --output-version v1_6 --output-format json
-
-      - name: Upload SBOM to Dependency-Track
-        uses: DependencyTrack/gh-upload-sbom@48feab3080ff9e8f51f4d21861d9fc914eb744f5
-        with:
-          serverHostname: ${{ secrets.DEPENDENCYTRACK_HOSTNAME }}
-          apiKey: ${{ secrets.DEPENDENCYTRACK_APIKEY }}
-          projectName: ${{ github.event.repository.name }}
-          projectVersion: ${{ github.ref_name }}
-          projectTags: 'flowable-modeler,${{ github.event.repository.name }}'
-          bomFilename: "target/combined-sbom-1.6.json"
-          autoCreate: true
+    - name: Upload SBOM to Dependency-Track
+      uses: DependencyTrack/gh-upload-sbom@48feab3080ff9e8f51f4d21861d9fc914eb744f5
+      with:
+        serverHostname: ${{ secrets.DEPENDENCYTRACK_HOSTNAME }}
+        apiKey: ${{ secrets.DEPENDENCYTRACK_APIKEY }}
+        projectName: ${{ github.event.repository.name }}
+        projectVersion: ${{ github.ref_name }}
+        projectTags: 'flowable-modeler,${{ github.event.repository.name }}'
+        bomFilename: "target/combined-sbom-1.6.json"
+        autoCreate: true
