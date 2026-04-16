@@ -16,8 +16,8 @@ COPY assets/flowable-modeler.war.original /opt/tomcat/webapps/flowable-modeler.w
 RUN cd /opt/tomcat && chgrp -R tomcat /opt/tomcat && chmod -R g+r conf && chmod g+x conf && chown -R tomcat webapps/ work/ temp/ logs/ \
     && chown tomcat /wait-for-something.sh && chmod +x /wait-for-something.sh
 
-ENV CATALINA_HOME /opt/tomcat
-ENV PATH $PATH:$CATALINA_HOME/bin
+ENV CATALINA_HOME=/opt/tomcat
+ENV PATH=$PATH:$CATALINA_HOME/bin
 ENV JAVA_OPTS="-Xms1024M -Xmx1024M -Djava.security.egd=file:/dev/./urandom"
 
 EXPOSE 8080
