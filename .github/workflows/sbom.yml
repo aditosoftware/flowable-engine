@@ -66,12 +66,12 @@ jobs:
       run: cosign attach sbom --sbom target/combined-sbom-1.6.json --type cyclonedx $IMAGE_NAME:${{ github.ref_name }}
 
     - name: Upload SBOM to Dependency-Track
-      uses: DependencyTrack/gh-upload-sbom@48feab3080ff9e8f51f4d21861d9fc914eb744f5
+      uses: DependencyTrack/gh-upload-sbom@v4.1.0
       with:
-        serverHostname: ${{ secrets.DEPENDENCYTRACK_HOSTNAME }}
-        apiKey: ${{ secrets.DEPENDENCYTRACK_APIKEY }}
-        projectName: ${{ github.event.repository.name }}
-        projectVersion: ${{ github.ref_name }}
-        projectTags: 'flowable-modeler,${{ github.event.repository.name }}'
-        bomFilename: "target/combined-sbom-1.6.json"
-        autoCreate: true
+        serverhostname: ${{ secrets.DEPENDENCYTRACK_HOSTNAME }}
+        apikey: ${{ secrets.DEPENDENCYTRACK_APIKEY }}
+        projectname: ${{ github.event.repository.name }}
+        projectversion: ${{ github.ref_name }}
+        projecttags: 'flowable-modeler,${{ github.event.repository.name }}'
+        bomfilename: "target/combined-sbom-1.6.json"
+        autocreate: true
