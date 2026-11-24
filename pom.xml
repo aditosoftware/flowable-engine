@@ -23,7 +23,7 @@
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>42.2.18</version>
+			<version>42.7.15</version>
 		</dependency>
     </dependencies>
     <groupId>org.flowable</groupId>
@@ -993,7 +993,7 @@
 			<dependency>
 				<groupId>org.postgresql</groupId>
 				<artifactId>postgresql</artifactId>
-				<version>42.2.6</version>
+				<version>42.7.15</version>
 			</dependency>
 			<dependency>
 				<groupId>xerces</groupId>
