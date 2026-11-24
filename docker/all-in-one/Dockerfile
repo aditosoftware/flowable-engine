@@ -5,8 +5,14 @@ RUN apk update && apk add fontconfig ghostscript-fonts && rm -rf /var/cache/apk/
 
 RUN addgroup tomcat && adduser -s /bin/false -G tomcat -h /opt/tomcat -D tomcat
 
-RUN wget http://archive.apache.org/dist/tomcat/tomcat-9/v9.0.14/bin/apache-tomcat-9.0.14.tar.gz -O /tmp/tomcat.tar.gz
-RUN cd /tmp && tar xvfz tomcat.tar.gz && cp -Rv /tmp/apache-tomcat-9.0.14/* /opt/tomcat/ && rm -Rf /tmp/apache-tomcat-9.0.14
+# Tomcat 9.0.x is the last line supporting javax.servlet (required by Flowable 6.5 / Spring Boot 2.2).
+# On version bump, update TOMCAT_SHA512 from the .sha512 file next to the tarball.
+ARG TOMCAT_VERSION=9.0.124
+ARG TOMCAT_SHA512=925e4fefe25b2ecccd032acd0b4cb1b506455037ed0f8b0e51824bed839c5e92bf5e58982b990d2fdcbc790bcda1a533db7faffb325f8a7baee939fc8ae871c1
+RUN wget -q https://archive.apache.org/dist/tomcat/tomcat-9/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz -O /tmp/tomcat.tar.gz \
+    && echo "${TOMCAT_SHA512}  /tmp/tomcat.tar.gz" | sha512sum -c - \
+    && tar xzf /tmp/tomcat.tar.gz -C /opt/tomcat --strip-components=1 \
+    && rm -rf /tmp/tomcat.tar.gz /opt/tomcat/webapps/*
 
 COPY context.xml /opt/tomcat/conf/context.xml
 
