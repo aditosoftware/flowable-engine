@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21.0.6_7-jdk-alpine-3.21
+FROM eclipse-temurin:21.0.13.1_2-jre-alpine-3.23
 ADD wait-for-something.sh .
 
 RUN apk update && apk add fontconfig ghostscript-fonts && rm -rf /var/cache/apk/*
