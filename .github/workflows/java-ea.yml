@@ -6,12 +6,16 @@ on:
       - master
       - 'flowable-release-*'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test_jdk14:
     name: Linux (OpenJDK EA)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2-beta
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 10
       - name: Install
